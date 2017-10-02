@@ -10,6 +10,10 @@
 
 #include "binary_tree.hpp"
 
+#include <fstream>
+#include <string>
+#include <iostream>
+
 void testTree(){
    Tree::Node *root = NULL;
    root = Tree::insert(root, 1);
@@ -24,9 +28,21 @@ void testTree(){
    Tree::print(root);
 }
 
+void printFile(){
+	std::string file_name = "test_files/PrefixTable.txt";
+	std::ifstream infile(file_name);
+	char *prefix = (char *)malloc(256 * (sizeof(char)));
+	int next_hop;
+	while (infile >> prefix >> next_hop){
+		std::cout
+		<< "Prefix: " << prefix
+		<< " Next Hop: " << next_hop << std::endl;
+	}
+}
+
 int main(){
    
-   testTree();
+   printFile();
 
    return 0;
 }
