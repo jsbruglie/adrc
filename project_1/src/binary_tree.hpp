@@ -8,6 +8,8 @@
 #ifndef BINARY_TREE_H
 #define BINARY_TREE_H
 
+#define EMPTY_NODE 0
+
 #include <stdlib.h>
 #include <stdint.h>
 
@@ -15,7 +17,7 @@
 #include <iostream>
 #include <iomanip>
 
-namespace Tree {
+namespace BinTree {
 
    /** @brief Structure for storing a node of the binary tree */
    typedef struct TreeNodeStruct{
@@ -30,23 +32,24 @@ namespace Tree {
    /**
     * @brief Inserts a node in a tree
     * @param root The root of the tree
+    * @param prefix The prefix string
     * @param value The value of the node to be inserted
     * @returns The root of the resulting tree
     */
-   Tree::Node *insert(Tree::Node *root, uint8_t value);
+   BinTree::Node *insert(BinTree::Node *root, char *prefix, uint8_t value);
 
    /** 
     * @brief Destroys a tree recursively
     * @param root The root of the tree
     * @returns NULL
     */
-   Tree::Node *destroy(Tree::Node *root);
+   BinTree::Node *destroy(BinTree::Node *root);
 
    /** 
     * @brief Prints a tree recursively
     * @param root The root of the tree
     */
-   void print(Tree::Node *root, int depth=0);
+   void print(BinTree::Node *root, int depth=0);
 }
 
 #endif
