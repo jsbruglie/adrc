@@ -49,15 +49,16 @@ namespace BinTree {
 
         if (root != NULL){
             std::cout
-            << std::setw(depth) << " "
-            << "[" << (int) root->value << "]"
+            << std::setw(depth+1) << " "
+            << "└─[" << (int) root->value << "]"
             << std::endl;
 
             print(root->left,depth+1);
             print(root->right,depth+1);
         } else{
             std::cout
-            << std::setw(depth+1) << "X"
+            << std::setw(depth+1) << " "
+            << "└─[NULL]"
             << std::endl;
         }
     }
