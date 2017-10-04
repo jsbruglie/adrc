@@ -52,6 +52,10 @@ int main(int argc, char *argv[])
    else
    {
       BinTree::Node *root = Prefix::prefixBinTree(argv[1]);
+      
+      cout << "[INFO] Printing tree." << endl;
       BinTree::print(root);
+      
+      Prefix::lookUp(root, (char*) "0010");
    }
 }

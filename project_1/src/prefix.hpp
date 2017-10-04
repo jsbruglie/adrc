@@ -15,6 +15,9 @@
 
 #include "tree.hpp"
 
+/** The maximum allowed length for a prefix */
+#define MAX_PREFIX_LEN 256
+
 namespace Prefix {
 
     /**
