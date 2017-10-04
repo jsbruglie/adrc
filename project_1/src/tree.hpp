@@ -30,13 +30,14 @@
 namespace BinTree {
 
     /** @brief Structure for storing a node of the binary tree */
-    typedef struct TreeNodeStruct{
-    /** Node value */
-    uint8_t value;
-    /** Left child */
-    struct TreeNodeStruct *left;
-    /** Right child*/
-    struct TreeNodeStruct *right;
+    typedef struct TreeNodeStruct
+    {
+        /** Node value */
+        uint8_t value;
+        /** Left child */
+        struct TreeNodeStruct *left;
+        /** Right child*/
+        struct TreeNodeStruct *right;
     }Node;
 
     /**
@@ -75,6 +76,18 @@ namespace BinTree {
      * @param root The root of the tree
     */
     void print(BinTree::Node *root, int depth=0);
+}
+
+namespace QuadTree {
+
+    /** @brief Structure for storing a node of the quad tree */
+    typedef struct TreeNodeStruct
+    {
+        /** Node value */
+        uint8_t value;
+        /** Node children array */
+        struct TreeNodeStruct *children[4];
+    }Node;
 }
 
 #endif

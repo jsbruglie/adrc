@@ -8,11 +8,11 @@
 * @author João Borrego
 */
 
-#include "tree.hpp"
+#include "prefix.hpp"
 
-#include <fstream>
-#include <string>
 #include <iostream>
+
+using namespace std;
 
 void readFile()
 {
@@ -39,10 +39,19 @@ void readFile()
     BinTree::print(root);
 }
 
-int main()
+void printUsage(char *bin){
+   cout << bin << " [path/to/input_file]" << endl;
+}
+
+int main(int argc, char *argv[])
 {
-
-    readFile();
-
-    return 0;
+   if (argc != 2)
+   {
+      printUsage(argv[0]);
+   }
+   else
+   {
+      BinTree::Node *root = Prefix::prefixBinTree(argv[1]);
+      BinTree::print(root);
+   }
 }
