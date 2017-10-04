@@ -8,13 +8,14 @@
 * @author João Borrego
 */
 
-#include "binary_tree.hpp"
+#include "tree.hpp"
 
 #include <fstream>
 #include <string>
 #include <iostream>
 
-void readFile(){
+void readFile()
+{
     
     std::ifstream infile("test_files/PrefixTable.txt");
     char *prefix = (char *)malloc(256 * (sizeof(char)));
@@ -22,20 +23,26 @@ void readFile(){
 
     BinTree::Node *root = NULL;
 
-    while (infile >> prefix >> next_hop){
+    while (infile >> prefix >> next_hop)
+    {
+        /*
         std::cout
         << "Prefix: " << prefix
         << " Next Hop: " << next_hop << std::endl;
-
+        */
         root = BinTree::insert(root, prefix, next_hop);
     }
 
     BinTree::print(root);
+    std::cout << "Removing prefix 0" << std::endl;
+    BinTree::remove(root, (char*)"0");
+    BinTree::print(root);
 }
 
-int main(){
+int main()
+{
 
-   readFile();
+    readFile();
 
     return 0;
 }
