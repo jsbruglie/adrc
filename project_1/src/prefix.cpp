@@ -46,9 +46,15 @@ namespace Prefix {
         return rv;
     }
     
-    int insertPrefix(BinTree::Node *root, char *prefix, int next_hop);
+    BinTree::Node *insertPrefix(BinTree::Node *root, char *prefix, int next_hop)
+    {
+        return BinTree::insert(root, prefix, next_hop);
+    }
     
-    BinTree::Node *deletePrefix(BinTree::Node *root, char *prefix);
+    int deletePrefix(BinTree::Node *root, char *prefix)
+    {
+        return BinTree::remove(root, prefix);
+    }
     
     QuadTree::Node *binaryToTwoBit(BinTree::Node *root);
     

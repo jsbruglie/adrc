@@ -14,31 +14,10 @@
 
 using namespace std;
 
-void readFile()
-{
-    
-    std::ifstream infile("test_files/PrefixTable.txt");
-    char *prefix = (char *)malloc(256 * (sizeof(char)));
-    int next_hop;
-
-    BinTree::Node *root = NULL;
-
-    while (infile >> prefix >> next_hop)
-    {
-        /*
-        std::cout
-        << "Prefix: " << prefix
-        << " Next Hop: " << next_hop << std::endl;
-        */
-        root = BinTree::insert(root, prefix, next_hop);
-    }
-
-    BinTree::print(root);
-    std::cout << "Removing prefix 0" << std::endl;
-    BinTree::remove(root, (char*)"0");
-    BinTree::print(root);
-}
-
+/**
+ * @brief Prints the usage command
+ * @param bin The file name of the main application (argv[0])
+ */
 void printUsage(char *bin){
    cout << bin << " [path/to/input_file]" << endl;
 }

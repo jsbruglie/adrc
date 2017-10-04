@@ -46,16 +46,16 @@ namespace Prefix {
      * @param root The root of the prefix tree
      * @param prefix The prefix to be inserted
      * @param next_hop The next-hop value
-     * @return Whether insertion was successful
+     * @return The root of the prefix tree
      */
-    int insertPrefix(BinTree::Node *root, char *prefix, int next_hop);
+    int insertPrefix(BinTree::Node **root, char *prefix, int next_hop);
 
     /**
      * @brief Creates a prefix tree from a table in a text file
-     * @param root
-     * @return Next-Hop value
+     * @param root The root of the prefix tree
+     * @return Whether removal was successful
      */
-    BinTree::Node *deletePrefix(BinTree::Node *root, char *prefix);
+    int deletePrefix(BinTree::Node *root, char *prefix);
 
     /**
      * @brief Creates a two-bit prefix tree from a binary prefix tree 
