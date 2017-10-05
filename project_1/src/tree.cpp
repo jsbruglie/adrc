@@ -91,6 +91,29 @@ namespace BinTree {
         return aux;
     }
 
+    int find(BinTree::Node *root, char *address)
+    {
+        char key = *address;
+        int aux = NOT_FOUND;
+
+        if (root == NULL)
+        {
+            aux = END_REACHED;
+        }
+        else
+        {
+            if (key == '\0')
+                aux = root->value;
+            else if (key == '0')
+                aux = find(root->left, address+1);
+            else if (key == '1')
+                aux = find(root->right, address+1);
+            if (aux == END_REACHED)
+                aux = root->value;
+        }
+        return aux;
+    }
+
     BinTree::Node* destroy(BinTree::Node *root)
     {
         if (root != NULL)
