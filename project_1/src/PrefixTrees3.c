@@ -268,8 +268,33 @@ void * convert(struct node_one_bit *root, struct node_two_bit **root2, char *pre
 
 }
 
-
-
+void print_table_even(struct node_two_bit *root, char *prefix, int depth)
+{
+	if(root != NULL)
+	{
+		if(root->next_hop != 0)
+		{
+			prefix[depth] = '\0';
+			fprintf(stdout, "%s %d\n", prefix, root->next_hop);
+		}
+		else
+		{
+			//fprintf(stdout, "X\n");
+		}
+		prefix[depth] = '0';
+		prefix[depth+1] = '0';
+		print_table_even(root->zero_zero, prefix, depth+2);
+		prefix[depth] = '0';
+		prefix[depth+1] = '1';
+		print_table_even(root->zero_one, prefix, depth+2);
+		prefix[depth] = '1';
+		prefix[depth+1] = '0';
+		print_table_even(root->one_zero, prefix, depth+2);
+		prefix[depth] = '1';
+		prefix[depth+1] = '1';
+		print_table_even(root->one_one, prefix, depth+2);
+	}
+}
 int main(int argc, char *argv[])
 {
 
@@ -290,6 +315,9 @@ int main(int argc, char *argv[])
 	fprintf(stdout, "%d\n", lookup(root, "10011"));
 
 	convert(root, &root2, prefix2, 0);
+
+	char prefix3[17] = "\0";
+	print_table_even(root2, prefix3, 0);
 
 }
 
