@@ -16,15 +16,11 @@
 #include <iomanip>
 
 /* Constants */
-/** TODO */
+
 #define EMPTY_NODE 0
-/** TODO */
 #define NOT_FOUND 0
-/** TODO */
 #define KEEP 1
-/** TODO */
 #define REMOVE -1
-/** TODO */
 #define END_REACHED -2
 
 namespace BinTree {
@@ -33,7 +29,7 @@ namespace BinTree {
     typedef struct TreeNodeStruct
     {
         /** Node value */
-        uint8_t value;
+        int value;
         /** Left child */
         struct TreeNodeStruct *left;
         /** Right child*/
@@ -45,7 +41,7 @@ namespace BinTree {
      * @param value The value of the node
      * @return The created node
      */
-    BinTree::Node *newNode(uint8_t value);
+    BinTree::Node *newNode(int value);
 
     /**
      * @brief Determines if it has no children.
@@ -61,7 +57,7 @@ namespace BinTree {
      * @param value The value of the node to be inserted
      * @returns The root of the resulting tree
      */
-    BinTree::Node *insert(BinTree::Node *root, char *prefix, uint8_t value);
+    BinTree::Node *insert(BinTree::Node *root, const char *prefix, int value);
 
     /**
      * @brief Removes a given prefix from the tree
@@ -72,7 +68,7 @@ namespace BinTree {
      * @param The prefix to be removed
      * @return A flag with the result of the operation
      */
-    int remove(BinTree::Node *root, char *prefix);
+    int remove(BinTree::Node *root, const char *prefix);
 
     /**
      * @brief Searches for the value of a node for a given address
@@ -80,20 +76,29 @@ namespace BinTree {
      * @param address The binary representation of a left/right path in the tree
      * @return The value of the node or a status flag if not found
      */
-    int find(BinTree::Node *root, char *address);
+    int find(BinTree::Node *root, const char *address);
 
     /** 
      * @brief Destroys a tree recursively
      * @param root The root of the tree
      * @returns NULL
-    */
+     */
     BinTree::Node *destroy(BinTree::Node *root);
 
     /** 
      * @brief Prints a tree recursively
      * @param root The root of the tree
-    */
+     * @param[in] depth The depth of the recursion
+     */
     void print(BinTree::Node *root, int depth=0);
+    
+    /**
+     * @brief Prints the prefix table given a prefix tree
+     * @param root The root of the tree
+     * @param prefix Auxiliary prefix variable that is passed down the recursion
+     * @param[in] depth The depth of the recursion
+     */
+    void printPrefix(BinTree::Node *root, char *prefix, int depth=0);
 }
 
 namespace QuadTree {
@@ -102,10 +107,58 @@ namespace QuadTree {
     typedef struct TreeNodeStruct
     {
         /** Node value */
-        uint8_t value;
+        int value;
         /** Node children array */
         struct TreeNodeStruct *children[4];
     }Node;
+
+    /**
+     * @brief Creates a new node with a given value
+     * @param value The value of the node
+     * @return The created node
+     */
+    QuadTree::Node *newNode(int value);
+
+    /**
+     * @brief Inserts a node in a quad tree
+     * @param root The root of the quad tree
+     * @param prefix The prefix string
+     * @param value The value of the node to be inserted
+     * @returns The root of the resulting quad tree
+     */
+    QuadTree::Node *insert(QuadTree::Node *root, const char *prefix, int value);
+
+    /**
+     * @brief Converts a binary prefix tree into a quad prefix tree
+     * @param bin_root The root of the binary prefix tree
+     * @param quad_root The root of the quad prefix tree
+     * @param prefix Auxiliary prefix variable that is passed down the recursion
+     * @param[in] depth The depth of the recursion
+     */
+    void convert(BinTree::Node *bin_root, QuadTree::Node **quad_root,
+        char *prefix, int depth=0);
+    
+    /** 
+     * @brief Destroys a quad tree recursively
+     * @param root The root of the tree
+     * @returns NULL
+     */
+    QuadTree::Node *destroy(QuadTree::Node *root);
+
+    /** 
+     * @brief Prints a quad tree recursively
+     * @param root The root of the tree
+     * @param[in] depth The depth of the recursion
+     */
+    void print(QuadTree::Node *root, int depth=0);
+
+    /**
+     * @brief Prints the prefix table given a quad (two-bit) prefix tree
+     * @param root The root of the tree
+     * @param prefix Auxiliary prefix variable that is passed down the recursion
+     * @param[in] depth The depth of the recursion
+     */
+    void printPrefix(QuadTree::Node *root, char *prefix, int depth=0);
 }
 
 #endif

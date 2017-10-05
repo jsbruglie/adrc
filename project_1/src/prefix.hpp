@@ -25,7 +25,7 @@ namespace Prefix {
      * @param text_file
      * @return The root of the created prefix tree
      */
-    BinTree::Node *prefixBinTree(char *text_file);
+    BinTree::Node *prefixBinTree(const char *text_file);
 
     /**
      * @brief Prints a prefix table given the corresponding prefix tree
@@ -39,7 +39,7 @@ namespace Prefix {
      * @param address The destination address
      * @return Next-hop value
      */
-    int lookUp(BinTree::Node *root, char *address);
+    int lookup(BinTree::Node *root, const char *address);
 
     /**
      * @brief Inserts a given prefix and next-hop value in a prefix tree
@@ -48,14 +48,13 @@ namespace Prefix {
      * @param next_hop The next-hop value
      * @return The root of the prefix tree
      */
-    int insertPrefix(BinTree::Node **root, char *prefix, int next_hop);
+    BinTree::Node *insertPrefix(BinTree::Node *root, const char *prefix, int next_hop);
 
     /**
-     * @brief Creates a prefix tree from a table in a text file
+     * @brief Removes a prefix from a prefix tree
      * @param root The root of the prefix tree
-     * @return Whether removal was successful
      */
-    int deletePrefix(BinTree::Node *root, char *prefix);
+    void deletePrefix(BinTree::Node *root, const char *prefix);
 
     /**
      * @brief Creates a two-bit prefix tree from a binary prefix tree 
@@ -68,7 +67,7 @@ namespace Prefix {
      * @brief Prints a prefix table for a given two-bit prefix tree
      * @param root The root of the quad prefix tree
      */
-    void printTableEven(BinTree::Node *root);
+    void printTableEven(QuadTree::Node *root);
 }
 
 #endif
