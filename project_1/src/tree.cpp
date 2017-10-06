@@ -46,7 +46,7 @@ namespace BinTree {
     int remove(BinTree::Node *root, const char *prefix)
     {
         char key = *prefix;
-        /** Auxiliary flag to determine wuther a node has to removed or kept */
+        /** Auxiliary flag to determine whether a node has to removed or kept */
         int aux = NOT_FOUND;
 
         if (root != NULL)
@@ -176,7 +176,10 @@ namespace QuadTree {
         return new_node;
     }
 
-    QuadTree::Node *insert(QuadTree::Node *root, const char *prefix, int value)
+    QuadTree::Node *insert(
+        QuadTree::Node *root,
+        const char *prefix,
+        int value)
     {
 
         char key[2];
@@ -204,9 +207,16 @@ namespace QuadTree {
         return aux;
     }
 
-    void convert(BinTree::Node *bin_root, QuadTree::Node **quad_root,
-        char *prefix, int depth)
+    QuadTree::Node *convert(
+        BinTree::Node *bin_root,
+        QuadTree::Node *quad_root,
+        char *prefix,
+        QuadTree::Node *cur_quad_root,
+        int depth)
     {
+        QuadTree::Node *aux = (cur_quad_root == NULL)?
+            quad_root : cur_quad_root;
+
         if (bin_root != NULL)
         {
             if (bin_root->value != EMPTY_NODE)
@@ -215,23 +225,24 @@ namespace QuadTree {
                 if (depth % 2 == 0)
                 {
                     prefix[depth] = '\0';
-                    *quad_root = insert(*quad_root, prefix, bin_root->value);
+                    aux = insert(aux, prefix, bin_root->value);
                 }
                 else
                 {
                     prefix[depth] = '0';
-                    *quad_root = insert(*quad_root, prefix, bin_root->value);
+                    aux = insert(aux, prefix, bin_root->value);
                     prefix[depth] = '1';
-                    *quad_root = insert(*quad_root, prefix, bin_root->value);
+                    aux = insert(aux, prefix, bin_root->value);
                     prefix[depth] = '\0';
                 }
             }
             prefix[depth] = '0';
-            convert(bin_root->left, quad_root, prefix, depth+1);
+            aux = convert(bin_root->left, quad_root, prefix, aux, depth+1);
             prefix[depth] = '1';
-            convert(bin_root->right, quad_root, prefix, depth+1);
+            aux = convert(bin_root->right, quad_root, prefix, aux, depth+1);
             prefix[depth] = '\0';
         }
+        return aux;
     }
 
     QuadTree::Node *destroy(QuadTree::Node *root)

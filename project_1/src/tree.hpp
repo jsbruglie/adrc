@@ -135,8 +135,12 @@ namespace QuadTree {
      * @param prefix Auxiliary prefix variable that is passed down the recursion
      * @param[in] depth The depth of the recursion
      */
-    void convert(BinTree::Node *bin_root, QuadTree::Node **quad_root,
-        char *prefix, int depth=0);
+    QuadTree::Node *convert(
+        BinTree::Node *bin_root,
+        QuadTree::Node *quad_root,
+        char *prefix,
+        QuadTree::Node *quad_cur_node=NULL,
+        int depth=0);
     
     /** 
      * @brief Destroys a quad tree recursively
