@@ -9,22 +9,21 @@
 
 namespace Prefix {
 
-    BinTree::Node *prefixBinTree(char *text_file)
+    BinTree::Node *prefixBinTree(const char *text_file)
     {
         BinTree::Node *root = NULL;
 
         std::ifstream infile(text_file);
         if (infile)
         {
-            char *prefix = (char *)malloc(MAX_PREFIX_LEN * (sizeof(char)));
+            char prefix[MAX_PREFIX_LEN] = {'\0'};
+
             int next_hop;
 
             while (infile >> prefix >> next_hop)
             {
                 root = BinTree::insert(root, prefix, next_hop);
             }
-
-            free(prefix);
         }
         else
         {
@@ -34,29 +33,45 @@ namespace Prefix {
         return root;
     }
     
-    void printTable(BinTree::Node *root);
+    void printTable(BinTree::Node *root)
+    {
+        char prefix[MAX_PREFIX_LEN] = {'\0'};
+        BinTree::printPrefix(root, prefix);
+    }
     
-    int lookUp(BinTree::Node *root, char *address)
+    int lookup(BinTree::Node *root, const char *address)
     {
         int rv = BinTree::find(root, address);
-        if (rv == NOT_FOUND)
+        if (rv == NOT_FOUND || rv == END_REACHED)
             std::cout << "[INFO] Address " << address <<  " is unreachable." << std::endl;
         else
             std::cout << "[INFO] Found next-hop " << rv << " for address " << address << std::endl;
         return rv;
     }
     
-    BinTree::Node *insertPrefix(BinTree::Node *root, char *prefix, int next_hop)
+    BinTree::Node *insertPrefix(BinTree::Node *root, const char *prefix, int next_hop)
     {
         return BinTree::insert(root, prefix, next_hop);
     }
     
-    int deletePrefix(BinTree::Node *root, char *prefix)
+    void deletePrefix(BinTree::Node *root, const char *prefix)
     {
-        return BinTree::remove(root, prefix);
+        if (BinTree::remove(root, prefix) == NOT_FOUND)
+            std::cout << "[INFO] Could not find desired prefix" << std::endl;
     }
     
-    QuadTree::Node *binaryToTwoBit(BinTree::Node *root);
+    QuadTree::Node *binaryToTwoBit(BinTree::Node *root)
+    {
+        
+        QuadTree::Node *quad_root = NULL;
+        char prefix[MAX_PREFIX_LEN] = {'\0'};
+        QuadTree::convert(root, &quad_root, prefix);
+        return quad_root;
+    }
     
-    void printTableEven(BinTree::Node *root);
+    void printTableEven(QuadTree::Node *root)
+    {
+        char prefix[MAX_PREFIX_LEN] = {'\0'};
+        QuadTree::printPrefix(root, prefix);
+    }
 }
