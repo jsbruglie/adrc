@@ -269,17 +269,17 @@ namespace QuadTree {
             {
                 v00 = v01 = bin->left->value;
                 if (b00 != NULL)
-                    v00 = (b00->value != 0) ? b00->value : v00;
+                    v00 = (b00->value != EMPTY_NODE) ? b00->value : v00;
                 if (b01 != NULL)
-                    v01 = (b01->value != 0) ? b01->value : v01;
+                    v01 = (b01->value != EMPTY_NODE) ? b01->value : v01;
             }
             if (bin->right != NULL)
             {
                 v10 = v11 = bin->right->value;
                 if (b10 != NULL)
-                    v10 = (b10->value != 0) ? b10->value : v10;
+                    v10 = (b10->value != EMPTY_NODE) ? b10->value : v10;
                 if (b11 != NULL)
-                    v11 = (b11->value != 0) ? b11->value : v11;
+                    v11 = (b11->value != EMPTY_NODE) ? b11->value : v11;
             }
             
             if (v00 != NONE) quad = insert(quad, "00", v00);
