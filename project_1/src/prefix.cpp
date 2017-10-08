@@ -65,7 +65,7 @@ namespace Prefix {
         
         QuadTree::Node *quad_root = NULL;
         char prefix[MAX_PREFIX_LEN] = {'\0'};
-        quad_root = QuadTree::convert(root, quad_root, prefix);
+        QuadTree::convert(root, &quad_root, prefix);
         return quad_root;
     }
     

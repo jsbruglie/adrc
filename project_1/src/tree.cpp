@@ -65,14 +65,14 @@ namespace BinTree {
                 }
             }
             else if (key == '0')
-            /* TODO - Maybe the node removal code can be further condensed */
             {
                 aux = remove(root->left, prefix+1);
                 if (aux == REMOVE)
                 {
                     free(root->left);
                     root->left = NULL;
-                    aux = (root->value == EMPTY_NODE && root->left == NULL)?
+                    /* If the current node is empty and left with no children then remove it */
+                    aux = (root->value == EMPTY_NODE && root->right == NULL)?
                         REMOVE : KEEP;
                 }
             }
@@ -83,7 +83,8 @@ namespace BinTree {
                 {
                     free(root->right);
                     root->right = NULL;
-                    aux = (root->value == EMPTY_NODE && root->right == NULL)?
+                    /* If the current node is empty and left with no children then remove it */
+                    aux = (root->value == EMPTY_NODE && root->left == NULL)?
                         REMOVE : KEEP;
                 }
             }
@@ -153,7 +154,10 @@ namespace BinTree {
             if(root->value != 0)
             {
                 prefix[depth] = '\0';
-                std::cout << prefix << " " << root->value << std::endl;
+                std::cout <<
+                std::setw(PRINT_PREFIX_WIDTH) << std::left << prefix <<
+                std::setw(PRINT_VALUE_WIDTH) << root->value <<
+                std::endl;
             }
             
             prefix[depth] = '0';
@@ -186,15 +190,19 @@ namespace QuadTree {
 
         Node *aux = root;
 
-        if (root == NULL)
+        if (root == NULL){
             aux = newNode(EMPTY_NODE);
+        }
         if (*prefix == '\0')
+        {
             aux->value = value;
+            //std::cout << "Inserted node with value " << value << std::endl;
+        }
         else
         {
             key[0] = prefix[0];
             key[1] = prefix[1];
-            /* TODO - Make pretty maybe */
+
             if (key[0] == '0' && key[1] == '0')
                 aux->children[0b00] = insert(aux->children[0b00], prefix+2, value); 
             else if (key[0] == '0' && key[1] == '1')
@@ -207,16 +215,12 @@ namespace QuadTree {
         return aux;
     }
 
-    QuadTree::Node *convert(
+    void convert(
         BinTree::Node *bin_root,
-        QuadTree::Node *quad_root,
+        QuadTree::Node **quad_root,
         char *prefix,
-        QuadTree::Node *cur_quad_root,
         int depth)
     {
-        QuadTree::Node *aux = (cur_quad_root == NULL)?
-            quad_root : cur_quad_root;
-
         if (bin_root != NULL)
         {
             if (bin_root->value != EMPTY_NODE)
@@ -225,24 +229,23 @@ namespace QuadTree {
                 if (depth % 2 == 0)
                 {
                     prefix[depth] = '\0';
-                    aux = insert(aux, prefix, bin_root->value);
+                    *quad_root = insert(*quad_root, prefix, bin_root->value);
                 }
                 else
                 {
                     prefix[depth] = '0';
-                    aux = insert(aux, prefix, bin_root->value);
+                    *quad_root = insert(*quad_root, prefix, bin_root->value);
                     prefix[depth] = '1';
-                    aux = insert(aux, prefix, bin_root->value);
+                    *quad_root = insert(*quad_root, prefix, bin_root->value);
                     prefix[depth] = '\0';
                 }
             }
             prefix[depth] = '0';
-            aux = convert(bin_root->left, quad_root, prefix, aux, depth+1);
+            convert(bin_root->left, quad_root, prefix, depth+1);
             prefix[depth] = '1';
-            aux = convert(bin_root->right, quad_root, prefix, aux, depth+1);
+            convert(bin_root->right, quad_root, prefix, depth+1);
             prefix[depth] = '\0';
         }
-        return aux;
     }
 
     QuadTree::Node *destroy(QuadTree::Node *root)
@@ -284,7 +287,10 @@ namespace QuadTree {
             if(root->value != 0)
             {
                 prefix[depth] = '\0';
-                std::cout << prefix << " " << root->value << std::endl;
+                std::cout <<
+                std::setw(PRINT_PREFIX_WIDTH) << std::left << prefix <<
+                std::setw(PRINT_VALUE_WIDTH) << root->value <<
+                std::endl;
             }
             
             prefix[depth] = '0'; prefix[depth+1] = '0';

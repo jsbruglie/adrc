@@ -23,6 +23,9 @@
 #define REMOVE -1
 #define END_REACHED -2
 
+#define PRINT_PREFIX_WIDTH 28
+#define PRINT_VALUE_WIDTH 5
+
 namespace BinTree {
 
     /** @brief Structure for storing a node of the binary tree */
@@ -126,21 +129,23 @@ namespace QuadTree {
      * @param value The value of the node to be inserted
      * @returns The root of the resulting quad tree
      */
-    QuadTree::Node *insert(QuadTree::Node *root, const char *prefix, int value);
+    QuadTree::Node *insert(
+        QuadTree::Node *root,
+        const char *prefix,
+        int value);
 
     /**
      * @brief Converts a binary prefix tree into a quad prefix tree
      * @param bin_root The root of the binary prefix tree
      * @param quad_root The root of the quad prefix tree
-     * @param prefix Auxiliary prefix variable that is passed down the recursion
+     * @param prefix Aux prefix variable that is passed down the recursion
      * @param[in] depth The depth of the recursion
      */
-    QuadTree::Node *convert(
+    void convert(
         BinTree::Node *bin_root,
-        QuadTree::Node *quad_root,
+        QuadTree::Node **quad_root,
         char *prefix,
-        QuadTree::Node *quad_cur_node=NULL,
-        int depth=0);
+        int depth = 0);
     
     /** 
      * @brief Destroys a quad tree recursively

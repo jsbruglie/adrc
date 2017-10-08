@@ -42,10 +42,9 @@ namespace Menu {
 
     /**
      * @brief Creates a binary prefix tree from a file.
-     * @param bin_root The root of the binary prefix tree
      * @return The root of the binary prefix tree
      */
-    BinTree::Node *readFile(BinTree::Node *bin_root);
+    BinTree::Node *readFile();
 
     /**
      * @brief Searches for a next-hop value in a prefix tree for a given address

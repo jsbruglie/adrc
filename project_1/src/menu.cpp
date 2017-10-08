@@ -1,6 +1,6 @@
 /** 
 * @file menu.cpp
-* @brief Interface header file
+* @brief Interface functions file
 * @author Nuno Venturinha
 * @author João Borrego
 */
@@ -30,7 +30,7 @@ namespace Menu {
         switch(command)
         {
             case MENU_READ_FILE:
-                *bin_root = readFile(*bin_root);
+                *bin_root = readFile();
                 break;
             case MENU_PRINT_TABLE:
                 Prefix::printTable(*bin_root);
@@ -45,6 +45,7 @@ namespace Menu {
                 deletePrefix(*bin_root);
                 break;
             case MENU_CONVERT:
+                *quad_root = QuadTree::destroy(*quad_root);
                 *quad_root = Prefix::binaryToTwoBit(*bin_root);
                 break;
             case MENU_PRINT_TABLE_EVEN_LENGTH:
@@ -80,7 +81,7 @@ namespace Menu {
         
     }
 
-    BinTree::Node *readFile(BinTree::Node *bin_root)
+    BinTree::Node *readFile()
     {
         std::string line = "";
         std::string file = "";
