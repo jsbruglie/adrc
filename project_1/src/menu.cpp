@@ -128,6 +128,7 @@ namespace Menu {
             if (isBinaryString(prefix) && next_hop > 0)
                 return Prefix::insertPrefix(bin_root, prefix.c_str(), next_hop);
         }
+        return bin_root;
     }
 
     void deletePrefix(BinTree::Node *bin_root)
