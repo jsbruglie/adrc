@@ -248,6 +248,55 @@ namespace QuadTree {
         }
     }
 
+    QuadTree::Node *altConvert(BinTree::Node* bin, QuadTree::Node *quad)
+    {
+        /* Binary tree nodes for 00, 01, 10 and 11 */
+        BinTree::Node *b00, *b01, *b10, *b11;
+        /* The value of each of those nodes */
+        int v00, v01, v10, v11;
+
+        v00 = v01 = v10 = v11 = NONE;
+
+        if (bin != NULL)
+        {
+            
+            b00 = (bin->left == NULL)? NULL : bin->left->left;
+            b01 = (bin->left == NULL)? NULL : bin->left->right;
+            b10 = (bin->right == NULL)? NULL : bin->right->left;
+            b11 = (bin->right == NULL)? NULL : bin->right->right;
+
+            if (bin->left != NULL)
+            {
+                v00 = v01 = bin->left->value;
+                if (b00 != NULL)
+                    v00 = (b00->value != EMPTY_NODE) ? b00->value : v00;
+                if (b01 != NULL)
+                    v01 = (b01->value != EMPTY_NODE) ? b01->value : v01;
+            }
+            if (bin->right != NULL)
+            {
+                v10 = v11 = bin->right->value;
+                if (b10 != NULL)
+                    v10 = (b10->value != EMPTY_NODE) ? b10->value : v10;
+                if (b11 != NULL)
+                    v11 = (b11->value != EMPTY_NODE) ? b11->value : v11;
+            }
+            
+            if (v00 != NONE) quad = insert(quad, "00", v00);
+            if (v01 != NONE) quad = insert(quad, "01", v01);
+            if (v10 != NONE) quad = insert(quad, "10", v10);
+            if (v11 != NONE) quad = insert(quad, "11", v11);
+
+            if (quad != NULL){
+                quad->children[0b00] = altConvert(b00, quad->children[0b00]);
+                quad->children[0b01] = altConvert(b01, quad->children[0b01]);
+                quad->children[0b10] = altConvert(b10, quad->children[0b10]);
+                quad->children[0b11] = altConvert(b11, quad->children[0b11]);
+            }
+        }
+        return quad;
+    }
+
     QuadTree::Node *destroy(QuadTree::Node *root)
     {
         if (root != NULL)

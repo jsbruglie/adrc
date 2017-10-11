@@ -18,6 +18,7 @@
 /* Constants */
 
 #define EMPTY_NODE 0
+#define NONE -1
 #define NOT_FOUND 0
 #define KEEP 1
 #define REMOVE -1
@@ -147,6 +148,10 @@ namespace QuadTree {
         char *prefix,
         int depth = 0);
     
+    QuadTree::Node *altConvert(
+        BinTree::Node* bin,
+        QuadTree::Node *quad);
+
     /** 
      * @brief Destroys a quad tree recursively
      * @param root The root of the tree
