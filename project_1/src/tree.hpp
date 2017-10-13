@@ -19,10 +19,10 @@
 
 #define EMPTY_NODE 0
 #define NONE -1
-#define NOT_FOUND 0
-#define KEEP 1
-#define REMOVE -1
-#define END_REACHED -2
+#define NOT_FOUND -2
+#define KEEP -3
+#define REMOVE -4
+#define END_REACHED -5
 
 #define PRINT_PREFIX_WIDTH 28
 #define PRINT_VALUE_WIDTH 5

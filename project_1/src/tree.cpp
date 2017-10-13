@@ -104,12 +104,15 @@ namespace BinTree {
         else
         {
             if (key == '\0')
-                aux = root->value;
+            	if (root->value != EMPTY_NODE)
+                	aux = root->value;
+                else
+                	return END_REACHED;
             else if (key == '0')
                 aux = find(root->left, address+1);
             else if (key == '1')
                 aux = find(root->right, address+1);
-            if (aux == END_REACHED)
+            if (aux == END_REACHED && root->value != EMPTY_NODE)
                 aux = root->value;
         }
         return aux;
@@ -151,7 +154,7 @@ namespace BinTree {
     {
         if (root != NULL)
         {
-            if(root->value != 0)
+            if(root->value != EMPTY_NODE)
             {
                 prefix[depth] = '\0';
                 std::cout <<
