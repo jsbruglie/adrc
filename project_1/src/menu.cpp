@@ -34,6 +34,7 @@ namespace Menu {
                 break;
             case MENU_PRINT_TABLE:
                 Prefix::printTable(*bin_root);
+                //BinTree::print(*bin_root);
                 break;
             case MENU_LOOKUP:
                 lookup(*bin_root);

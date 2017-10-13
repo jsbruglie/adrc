@@ -21,7 +21,7 @@ namespace BinTree {
     bool hasNoChildren(BinTree::Node *root)
     {
         if (root != NULL)
-            return (root->left == NULL || root->right == NULL);
+            return (root->left == NULL && root->right == NULL);
         return true;
     }
 
