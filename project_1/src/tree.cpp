@@ -237,14 +237,13 @@ namespace QuadTree {
                     *quad_root = insert(*quad_root, prefix, bin_root->value);
                     prefix[depth] = '1';
                     *quad_root = insert(*quad_root, prefix, bin_root->value);
-                    prefix[depth] = '\0';
+                    //prefix[depth] = '\0';
                 }
             }
             prefix[depth] = '0';
             convert(bin_root->left, quad_root, prefix, depth+1);
             prefix[depth] = '1';
             convert(bin_root->right, quad_root, prefix, depth+1);
-            prefix[depth] = '\0';
         }
     }
 

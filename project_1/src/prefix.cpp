@@ -27,8 +27,8 @@ namespace Prefix {
         }
         else
         {
-            std::cerr << "[Error] Could not open input file "<< text_file << std::endl;
-            std::exit(EXIT_FAILURE);
+            std::cerr << "[ERROR] Could not open input file "<< text_file << std::endl;
+            return NULL;
         }
         return root;
     }

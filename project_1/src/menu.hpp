@@ -35,16 +35,17 @@ namespace Menu {
     
     /**
      * @brief Main menu program loop
-     * @param bin_root The binary prefix tree root
-     * @param quad_root The quad prefix tree root
+     * @param bin_root The root of the binary prefix tree
+     * @param quad_root The root of the quad prefix tree
      */
     void loop(BinTree::Node **bin_root, QuadTree::Node **quad_root);
 
     /**
      * @brief Creates a binary prefix tree from a file.
+     * @param The root of the binary prefix tree
      * @return The root of the binary prefix tree
      */
-    BinTree::Node *readFile();
+    BinTree::Node *readFile(BinTree::Node *bin_root);
 
     /**
      * @brief Searches for a next-hop value in a prefix tree for a given address

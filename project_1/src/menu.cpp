@@ -30,7 +30,7 @@ namespace Menu {
         switch(command)
         {
             case MENU_READ_FILE:
-                *bin_root = readFile();
+                *bin_root = readFile(*bin_root);
                 break;
             case MENU_PRINT_TABLE:
                 Prefix::printTable(*bin_root);
@@ -81,20 +81,27 @@ namespace Menu {
         
     }
 
-    BinTree::Node *readFile()
+    BinTree::Node *readFile(BinTree::Node *bin_root)
     {
         std::string line = "";
         std::string file = "";
 
+        BinTree::Node *aux = bin_root;
+
         std::cout << "[INPUT] Path to file: ";
-        
+
         getline(std::cin, line);
         std::stringstream input_stream(line);
         if (input_stream >> file)
         {
-            return Prefix::prefixBinTree(file.c_str());
+            aux = Prefix::prefixBinTree(file.c_str());
         }
-        return NULL;
+
+        if (aux != NULL)
+        {
+            return aux;
+        }
+        return bin_root;
     }
 
     void lookup(BinTree::Node *bin_root)
