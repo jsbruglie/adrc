@@ -29,7 +29,7 @@ Graph *createGraph(int v)
     // Nodes are 0-indexed
     graph->V = v + 1;
     graph->E = 0;
-    graph->lists = (AdjListNode**) malloc(sizeof(AdjListNode*) * (graph->V + 1));
+    graph->lists = (AdjListNode**) malloc(sizeof(AdjListNode*) * (graph->V));
     for (i = 0; i < graph->V; i++)
     {
         graph->lists[i] = NULL;
@@ -122,7 +122,8 @@ bool hasCycleDFS(Graph *graph, int source, color *v_color)
             }
             else if (v_color[cur->destination] == white)
             {
-                hasCycleDFS(graph, cur->destination, v_color); 
+                if (hasCycleDFS(graph, cur->destination, v_color))
+                    return true; 
             }
         }
         cur = cur->next;
@@ -251,12 +252,13 @@ void printGraph(Graph *graph)
 
     if (graph)
     {
+        printf("Graph\tV %d\tE %d\n", graph->V, graph->E);
         for (i = 0; i < graph->V; i++)
         {
             cur = graph->lists[i];
             while (cur)
             {
-                printf ("src %d\t dst %d\ttype %d\n",
+                printf("src %d\tdst %d\ttype %d\n",
                     i, cur->destination, cur->type);
                 cur = cur->next;
             }
