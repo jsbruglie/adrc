@@ -9,14 +9,16 @@
 #include <stdlib.h>
 // IO
 #include <stdio.h>
+// Memset
+#include <string.h>
 
-/** Boolean types */
-typedef enum { false=0, true } bool;
+#include "utils.h"
+
 /** Node color code */
 typedef enum { white=0, grey, black } color;
 
 /** Edge type code */
-typedef enum { C=0,R,P,I } type;
+typedef enum { C=1,R,P,I } type;
 
 /**
  * @brief      Node of adjacency list
@@ -110,6 +112,16 @@ bool hasCycleDFS(Graph *graph, int source, color *v_color);
  * @return     True if has any cycles, False otherwise.
  */
 bool hasCycle(Graph *graph); 
+
+
+
+
+
+
+bool hasProvider(Graph *graph, int node);
+
+
+bool isStronglyConnected(Graph *graph);
 
 /**
  * @brief      Prints the contents of the graph adjacency list representation
