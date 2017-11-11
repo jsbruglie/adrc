@@ -110,6 +110,7 @@ bool hasCycleDFS(Graph *graph, int source, color *v_color)
 
     v_color[source] = grey;
     cur = graph->lists[source];
+
     while (cur)
     {
         // Only need to consider customer provider (type C) edges
@@ -121,7 +122,7 @@ bool hasCycleDFS(Graph *graph, int source, color *v_color)
             }
             else if (v_color[cur->destination] == white)
             {
-                return hasCycleDFS(graph, cur->destination, v_color); 
+                hasCycleDFS(graph, cur->destination, v_color); 
             }
         }
         cur = cur->next;
