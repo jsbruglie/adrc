@@ -148,9 +148,12 @@ bool hasCycle(Graph *graph)
 
         for (i = 0; i < graph->V; i++)
         {
-            found_cycle = hasCycleDFS(graph, i, v_color);
-            if (found_cycle)
-                break;
+            if (v_color[i] == white)
+            {
+                found_cycle = hasCycleDFS(graph, i, v_color);
+                if (found_cycle)
+                    break;
+            }
         }
     }
     return found_cycle;
