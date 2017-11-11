@@ -24,5 +24,9 @@ int main(int argc, char *argv[])
     Graph *g = createGraphFromFile(argv[1]);
 
     printGraph(g);
+    
+    bool has_cycle = hasCycle(g);
+    printf("\nGraph has cycles %d\n", has_cycle);
+
     deleteGraph(&g);
 }

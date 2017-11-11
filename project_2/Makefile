@@ -20,7 +20,7 @@ MKDIR_P ?= mkdir -p
 # Main binary executable
 $(BIN_DIR)/$(TARGET_EXEC): $(OBJS)
 	@$(MKDIR_P) $(dir $@)
-	g++ $(OBJS) -o $@ $(LDFLAGS)
+	$(CC) $(OBJS) -o $@ $(LDFLAGS)
 
 # C source
 $(BUILD_DIR)/%.c.o: %.c

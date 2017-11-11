@@ -42,6 +42,7 @@ void addEdge(Graph *graph, int source, int destination, int type)
     AdjListNode *node = createNode(destination, type);
     node->next = graph->lists[source];
     graph->lists[source] = node;
+    graph->E++;
 }
 
 Graph *createGraphFromFile(char *text_file)
@@ -100,6 +101,56 @@ void deleteGraph(Graph **graph_ptr)
         free(graph);
     }
     *graph_ptr = NULL;
+}
+
+bool hasCycleDFS(Graph *graph, int source, color *v_color)
+{
+    AdjListNode *cur;
+
+    v_color[source] = grey;
+    cur = graph->lists[source];
+    while (cur)
+    {
+        // Only need to consider customer provider (type C) edges
+        if (cur->type == C)
+        {
+            if (v_color[cur->destination] == grey)
+            {
+                return true;
+            }
+            else if (v_color[cur->destination] == white)
+            {
+                return hasCycleDFS(graph, cur->destination, v_color); 
+            }
+        }
+        cur = cur->next;
+    }
+    v_color[source] = black;
+    return false;
+}
+
+bool hasCycle(Graph *graph)
+{
+    int i;
+    bool found_cycle = false;
+
+    if (graph)
+    {
+        color v_color[graph->V];
+        
+        for (i = 0; i <= graph->V; i++)
+        {
+            v_color[i] = white;
+        }
+
+        for (i = 0; i <= graph->V; i++)
+        {
+            found_cycle = hasCycleDFS(graph, i, v_color);
+            if (found_cycle)
+                break;
+        }
+    }
+    return found_cycle;
 }
 
 void printGraph(Graph *graph)
