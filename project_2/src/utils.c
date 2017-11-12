@@ -17,3 +17,8 @@ int intFind(int *array, int size, int number)
     }
     return -1;
 }
+
+int intMax(int a, int b)
+{
+	return (a > b)? a : b;
+}

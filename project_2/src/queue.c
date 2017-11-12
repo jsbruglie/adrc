@@ -91,12 +91,17 @@ void printPrioQueue(PrioQueue *queue)
 
     if (queue)
     {
-        printf("Queue:\n");
+        printf("Queue:\t");
         for (i = 0; i < queue->size; i++)
         {
-            printf("(%d,%d) ", queue->array[i]->cost, queue->array[i]->v);
+            printf("(%d,%d) ", queue->array[i]->v, queue->array[i]->cost);
         }
-        printf("\nStart %d Block idx ", queue->idx_start);
+        printf("\nIdx:\t");
+        for (i = 0; i < queue->size; i++)
+        {
+            printf("(%d,%d) ", i, queue->idx_array[i]);
+        }
+        printf("\n\tStart %d Block idx ", queue->idx_start);
         for (i = 0; i < queue->values; i++)
         {
             printf("%d ", queue->idx_block[i]);
@@ -115,7 +120,7 @@ QueueNode *getMaxPriority(PrioQueue *queue)
         {
             min = queue->array[queue->idx_start];
             queue->idx_start++;
-            return min;       
+            return min;
         }
     }
     return NULL;
@@ -125,31 +130,47 @@ void decreaseKey(PrioQueue *queue, int node, int cost)
 {
     int i;
     int idx_node, block_start;
+    int old_cost;
+
+    int j;
 
     if (queue)
     {
         // Index of node in queue that needs to be updated
         idx_node = queue->idx_array[node];
         // Only update cost if it decreases
-        if (cost < queue->array[idx_node]->cost)
+        old_cost = queue->array[idx_node]->cost;
+        if (cost < old_cost)
         {
-            printf("\tDecreasing node %d to cost %d\n", node, cost);
+            /*
+            printf("Change:\tNode %d to cost %d\n", node, cost);
             printf("\tNode found at index %d\n", idx_node);
+            */
+
             // Update node cost
             queue->array[idx_node]->cost = cost;
             
-            // Fix block starting node
-            for (i = cost; i < queue->values - 1; i++)
+            // Fix first node of each non-empty block
+            for (i = cost+1; i < queue->values; i++)
             {
                 // Swap out of place node of block i with first in block i + 1,
                 //  thus fixing block i
-                block_start = queue->idx_block[i+1];
-                SWAP_PTR(queue->array, idx_node, block_start);
-                SWAP_INT(queue->idx_array, idx_node, block_start);
-                
-                printf("\tSwapping (%d,%d) <---> (%d,%d)\n",
-                    queue->array[idx_node]->cost, queue->array[idx_node]->v, 
-                    queue->array[block_start]->cost, queue->array[block_start]->v);
+                block_start = queue->idx_block[i];
+
+                // Only perform swap if block is not empty
+                if (queue->array[block_start]->cost == i)
+                {
+                    queue->idx_array[queue->array[idx_node]->v] = block_start;
+                    queue->idx_array[queue->array[block_start]->v] = idx_node;
+                    SWAP_PTR(queue->array, idx_node, block_start);
+
+                    /*
+                    printf("\tSwapping (%d,%d) <---> (%d,%d)\n",
+                        queue->array[idx_node]->v, queue->array[idx_node]->cost, 
+                        queue->array[block_start]->v, queue->array[block_start]->cost);
+                    printPrioQueue(queue);
+                    */
+                }
             }
 
             // Fix block start indices
