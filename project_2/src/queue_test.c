@@ -1,5 +1,5 @@
 #include "queue.h"
-
+/*
 int main(int argc, char *argv[])
 {
     PrioQueue *q;
@@ -28,3 +28,4 @@ int main(int argc, char *argv[])
 
     deletePrioQueue(&q);
 }
+*/
