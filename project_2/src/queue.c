@@ -142,7 +142,7 @@ void decreaseKey(PrioQueue *queue, int node, int cost)
         old_cost = queue->array[idx_node]->cost;
         if (cost < old_cost)
         {
-            /*
+            /*   
             printf("Change:\tNode %d to cost %d\n", node, cost);
             printf("\tNode found at index %d\n", idx_node);
             */
@@ -151,7 +151,7 @@ void decreaseKey(PrioQueue *queue, int node, int cost)
             queue->array[idx_node]->cost = cost;
             
             // Fix first node of each non-empty block
-            for (i = cost+1; i < queue->values; i++)
+            for (i = cost + 1; i <= old_cost; i++)
             {
                 // Swap out of place node of block i with first in block i + 1,
                 //  thus fixing block i
@@ -163,7 +163,6 @@ void decreaseKey(PrioQueue *queue, int node, int cost)
                     queue->idx_array[queue->array[idx_node]->v] = block_start;
                     queue->idx_array[queue->array[block_start]->v] = idx_node;
                     SWAP_PTR(queue->array, idx_node, block_start);
-
                     /*
                     printf("\tSwapping (%d,%d) <---> (%d,%d)\n",
                         queue->array[idx_node]->v, queue->array[idx_node]->cost, 
@@ -171,12 +170,9 @@ void decreaseKey(PrioQueue *queue, int node, int cost)
                     printPrioQueue(queue);
                     */
                 }
-            }
-
-            // Fix block start indices
-            //  each block i, for i > cost will shift one position to the right
-            for (i = cost+1; i < queue->values; i++)
+                // Fix block start indices
                 queue->idx_block[i]++;
+            }
         }
     }
 }
