@@ -16,17 +16,23 @@ void printUsage()
 int main(int argc, char *argv[])
 {
 
+    Graph *graph;
+    bool rv;
+
     if (argc != 2){
         printUsage();
         exit(EXIT_FAILURE);
     }
 
-    Graph *g = createGraphFromFile(argv[1]);
+    graph = createGraphFromFile(argv[1]);
 
-    printGraph(g);
+    //printGraph(graph);
     
-    bool has_cycle = hasCycle(g);
-    printf("\nGraph has cycles %d\n", has_cycle);
+    rv = hasCycle(graph);
+    printf("Graph has cycles %d\n", rv);
 
-    deleteGraph(&g);
+    rv = isStronglyConnected(graph);
+    printf("Graph is strongly connected %d\n", rv);
+
+    deleteGraph(&graph);
 }
