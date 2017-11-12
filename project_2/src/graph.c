@@ -61,7 +61,8 @@ Graph *createGraphFromFile(char *text_file)
         graph = createGraph(highest_id);
         while (fscanf(infile, "%d %d %d", &source, &destination, &type) == 3)
         {
-            addEdge(graph, source, destination, type);
+            // Connection type is 0-indexed (C = 0)
+            addEdge(graph, source, destination, type - 1);
         }
     }
     else

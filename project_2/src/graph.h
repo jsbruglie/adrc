@@ -20,7 +20,7 @@
 typedef enum { white=0, grey, black } color;
 
 /** Edge type code */
-typedef enum { C=1,R,P,I } type;
+typedef enum { C=0,R,P,I } type;
 
 /**
  * @brief      Node of adjacency list
