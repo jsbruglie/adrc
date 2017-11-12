@@ -7,10 +7,7 @@
 AdjListNode *createNode(int destination, int type)
 {
     AdjListNode *node = (AdjListNode*) malloc(sizeof(AdjListNode));
-    if (!node)
-    {
-        // TODO
-    }
+    assert(node);
     node->destination = destination;
     node->type = type;
     node->next = NULL;
@@ -22,10 +19,7 @@ Graph *createGraph(int v)
     int i;
 
     Graph *graph = (Graph*) malloc(sizeof(Graph));
-    if (!graph)
-    {
-        // TODO
-    }
+    assert(graph);
     // Nodes are 0-indexed
     graph->V = v + 1;
     graph->E = 0;
@@ -139,6 +133,7 @@ bool hasCycle(Graph *graph)
 
     if (graph)
     {
+        // TODO Proper malloc; V not known at compile time
         color v_color[graph->V];
         
         for (i = 0; i < graph->V; i++)

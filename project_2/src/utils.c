@@ -4,7 +4,7 @@
 
 #include "utils.h"
 
-int intFind(int *array, int size, int num)
+int intFind(int *array, int size, int number)
 {
     int i;
 
@@ -12,7 +12,7 @@ int intFind(int *array, int size, int num)
     {
         for (i = 0; i < size; i++)
         {
-            if (array[i] == num) return i;
+            if (array[i] == number) return i;
         }
     }
     return -1;

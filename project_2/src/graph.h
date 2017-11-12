@@ -11,6 +11,8 @@
 #include <stdio.h>
 // Memset
 #include <string.h>
+// Error handling
+#include <assert.h>
 
 #include "utils.h"
 
