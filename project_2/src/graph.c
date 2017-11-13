@@ -76,7 +76,7 @@ Graph *createGraphFromFile(char *text_file)
     }
     else
     {
-        // TODO
+        // TODO - handle incorrect file
     }
 
     fclose(infile);
@@ -286,6 +286,7 @@ void dijkstra(Graph *graph, int node, PrioQueue *queue, type* route_types)
         neighbour = graph->lists[min->v];
         while (neighbour)
         {
+            // TODO - maybe remove selectionOp function and replace with direct matrix access?
             updated_cost = selectionOp((type) min->cost, (type) neighbour->type);
             decreaseKey(queue, neighbour->destination, updated_cost);
             neighbour = neighbour->next;
@@ -313,7 +314,7 @@ void shortestPathTo(Graph *graph, int node, type* route_types)
 }
 
 
-void printStatistics(Graph *graph)
+void printStatistics(Graph *graph, bool verbose)
 {
     int i;
     PrioQueue *queue;
@@ -329,9 +330,14 @@ void printStatistics(Graph *graph)
 
         for (i = 0; i < graph->V; i++)
         {
-            dijkstra(graph, i, queue, routes);
-            // TODO - process output and get statistics
-            initPrioQueue(queue);
+            // Only check nodes that are not completely disconnected
+            if (graph->lists[i])
+            {
+                dijkstra(graph, i, queue, routes);
+                // TODO - process output and get statistics
+                initPrioQueue(queue);
+            }
+            if (verbose) printf("Working: %.2f%%\r", (i * 100.0) / (1.0 * graph->V));
         }
 
         deletePrioQueue(&queue);

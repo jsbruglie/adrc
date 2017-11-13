@@ -132,7 +132,7 @@ void dijkstra(Graph *graph, int node, PrioQueue *queue, type* route_types);
 void shortestPathTo(Graph *graph, int node, type* route_types);
 
 
-void printStatistics(Graph *graph);
+void printStatistics(Graph *graph, bool verbose);
 
 /**
  * @brief      Prints the contents of the graph adjacency list representation

@@ -34,6 +34,7 @@ int main(int argc, char *argv[])
     //rv = isStronglyConnected(graph);
     //printf("Graph is strongly connected %d\n", rv);
 
+    /*
     int node = 1234;
 
     type routes[graph->V];
@@ -48,6 +49,8 @@ int main(int argc, char *argv[])
         }
     }
     printf("\n");    
+    */
+    printStatistics(graph, true);
 
     deleteGraph(&graph);
 }

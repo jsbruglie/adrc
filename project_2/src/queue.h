@@ -20,8 +20,6 @@ typedef struct QueueNodeStruct
     int v;
     /** Current cost for a respective node */
     int cost;
-    /** In edge */
-    int in;
 
 } QueueNode;
 
