@@ -320,45 +320,53 @@ void shortestPathTo(Graph *graph, int node, route_type* routes, bool connected)
 
 void printStatistics(Graph *graph, bool connected, bool verbose)
 {
-    int i, j;
-    PrioQueue *queue;
-    route_type *routes;
-
-    int num_route_types[ROUTE_TYPES] = {0};
+    int num_C_routes = 0;
+    int num_R_routes = 0;
+    int num_P_routes = 0;
     int total = 0;
 
     if (graph)
     {
-        queue = createPrioQueue(EDGE_TYPES, graph->V);
-        routes = (route_type*) malloc(sizeof(route_type) * graph->V);
-        assert(routes);
-
-        for (i = 0; i < graph->V; i++)
+        #pragma omp parallel reduction(+:num_C_routes, num_R_routes, num_P_routes, total)
         {
-            // Only check nodes that are not completely disconnected
-            if (graph->lists[i])
-            {
-                dijkstra(graph, i, queue, routes, connected);    
-                
-                for (j = 0; j < graph->V; j++)
-                {
-                    if (j != i && graph->lists[j])
-                    {
-                        num_route_types[routes[j]]++;
-                        total++;
-                    }
-                }
+            int i, j;
+            PrioQueue *queue = createPrioQueue(EDGE_TYPES, graph->V);
+            route_type *routes = (route_type*) malloc(sizeof(route_type) * graph->V);
+            assert(routes);
 
-                initPrioQueue(queue);
+            #pragma omp for schedule(dynamic)
+            for (i = 0; i < graph->V; i++)
+            {
+                int tid = omp_get_thread_num();
+                // Only check nodes that are not completely disconnected
+                if (graph->lists[i])
+                {
+                    dijkstra(graph, i, queue, routes, connected);    
+                    
+                    for (j = 0; j < graph->V; j++)
+                    {
+                        if (j != i && graph->lists[j])
+                        {
+                            switch(routes[j])
+                            {
+                                case C: num_C_routes++; break;
+                                case R: num_R_routes++; break;
+                                case P: num_P_routes++; break;
+                            }
+                            total++;
+                        }
+                    }
+                    initPrioQueue(queue);
+                }
+                if (verbose) printf("\rWorking: %.2f%%", (i * 100.0) / (1.0 * graph->V));
             }
-            if (verbose) printf("\rWorking: %.2f%%", (i * 100.0) / (1.0 * graph->V));
+
+            deletePrioQueue(&queue);
+            free(routes);
         }
 
-        printf("\nRoutes\n\tCustomer:\t%d\n\tPeer:\t\t%d\n\tProvider:\t%d\n\tTotal:\t\t%d\n",
-            num_route_types[C], num_route_types[R], num_route_types[P], total);
-
-        deletePrioQueue(&queue);
-        free(routes);
+        printf("Routes\n\tCustomer:\t%d\n\tPeer:\t\t%d\n\tProvider:\t%d\n\tTotal:\t\t%d\n",
+            num_C_routes, num_R_routes, num_P_routes, total);
     }
 }
 

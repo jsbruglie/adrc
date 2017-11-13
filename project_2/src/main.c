@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
     }
     */
 
-    printStatistics(graph, is_connected, true);
+    printStatistics(graph, is_connected, false);
 
     deleteGraph(&graph);
 }

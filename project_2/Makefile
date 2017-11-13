@@ -20,12 +20,12 @@ MKDIR_P ?= mkdir -p
 # Main binary executable
 $(BIN_DIR)/$(TARGET_EXEC): $(OBJS)
 	@$(MKDIR_P) $(dir $@)
-	$(CC) $(OBJS) -o $@ $(LDFLAGS)
+	$(CC) -fopenmp $(OBJS) -o $@ $(LDFLAGS)
 
 # C source
 $(BUILD_DIR)/%.c.o: %.c
 	@$(MKDIR_P) $(dir $@)
-	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+	$(CC) -fopenmp $(CPPFLAGS) $(CFLAGS) -c $< -o $@
 
 # C++ source
 $(BUILD_DIR)/%.cpp.o: %.cpp
