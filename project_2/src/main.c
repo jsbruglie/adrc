@@ -33,22 +33,21 @@ int main(int argc, char *argv[])
 
     printf("Graph has cycles %d\n", has_cycle);
     printf("Graph is strongly connected %d\n", is_connected);
-    
+
     /*
     int node = 1234;
     route_type routes[graph->V];
-    shortestPathTo(graph, node, routes, false);
+    shortestPathTo(graph, node, routes, is_connected);
     int i;
     for (i = 0; i < graph->V; i++){
         if (graph->lists[i] && i != node)
         { 
-            // TODO why is the route type output inverted?
             printf("%d %d %d\n", i, (routes[i] + 1), node);
         }
     }
     */
-    
-    //printStatistics(graph, true, connected);
+
+    printStatistics(graph, is_connected, true);
 
     deleteGraph(&graph);
 }

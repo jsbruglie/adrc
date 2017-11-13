@@ -7,9 +7,9 @@
 /** Resulting path type for ingoing and outgoing edge types */
 route_type TYPE_MATRIX[EDGE_TYPES][ROUTE_TYPES] =
 {
-    { C, I, I, I},
+    { P, P, P, I},
     { R, I, I, I},
-    { P, P, P, I}
+    { C, I, I, I}
 };
 
 AdjListNode *createNode(int destination, int type)
@@ -291,13 +291,7 @@ void dijkstra(Graph *graph, int node, PrioQueue *queue, route_type* routes, bool
             if (routes[neighbour->destination] == initial_cost)
             {
                 // TODO - maybe remove selectionOp function and replace with direct matrix access?
-                if (neighbour->type == P_edge) 
-                    updated_cost = selectionOp((edge_type) C_edge, (route_type) min->cost);
-                else if (neighbour->type == C_edge) 
-                    updated_cost = selectionOp((edge_type) P_edge, (route_type) min->cost);
-                else
-                    updated_cost = selectionOp((edge_type) neighbour->type, (route_type) min->cost);
-
+                updated_cost = selectionOp((edge_type) neighbour->type, (route_type) min->cost);
                 decreaseKey(queue, neighbour->destination, updated_cost);
             }
             neighbour = neighbour->next;
@@ -326,11 +320,12 @@ void shortestPathTo(Graph *graph, int node, route_type* routes, bool connected)
 
 void printStatistics(Graph *graph, bool connected, bool verbose)
 {
-    int i;
+    int i, j;
     PrioQueue *queue;
     route_type *routes;
 
-    int total_C = 0, total_R = 0, total_P = 0, total = 0;
+    int num_route_types[ROUTE_TYPES] = {0};
+    int total = 0;
 
     if (graph)
     {
@@ -343,12 +338,24 @@ void printStatistics(Graph *graph, bool connected, bool verbose)
             // Only check nodes that are not completely disconnected
             if (graph->lists[i])
             {
-                dijkstra(graph, i, queue, routes, connected);
-                // TODO - process output and get statistics
+                dijkstra(graph, i, queue, routes, connected);    
+                
+                for (j = 0; j < graph->V; j++)
+                {
+                    if (j != i && graph->lists[j])
+                    {
+                        num_route_types[routes[j]]++;
+                        total++;
+                    }
+                }
+
                 initPrioQueue(queue);
             }
             if (verbose) printf("\rWorking: %.2f%%", (i * 100.0) / (1.0 * graph->V));
         }
+
+        printf("\nRoutes\n\tCustomer:\t%d\n\tPeer:\t\t%d\n\tProvider:\t%d\n\tTotal:\t\t%d\n",
+            num_route_types[C], num_route_types[R], num_route_types[P], total);
 
         deletePrioQueue(&queue);
         free(routes);
