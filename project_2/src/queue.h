@@ -2,6 +2,9 @@
  * @file queue.h
  */
 
+#ifndef QUEUE_H
+#define QUEUE_H
+
 // Memory allocation
 #include <stdlib.h>
 // IO
@@ -48,3 +51,5 @@ void printPrioQueue(PrioQueue *queue);
 QueueNode *getMaxPriority(PrioQueue *queue);
 
 void decreaseKey(PrioQueue *queue, int node, int cost);
+
+#endif

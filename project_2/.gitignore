@@ -1,2 +1,4 @@
 # Test files
 *.graph
+# Test output files
+*.txt

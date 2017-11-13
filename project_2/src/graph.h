@@ -15,18 +15,43 @@
 #include <assert.h>
 
 #include "utils.h"
+#include "queue.h"
+
+/** Number of connection types */
+#define EDGE_TYPES 3
+/** Number of connection types */
+#define ROUTE_TYPES 4
+
+/** Edge type code */
+typedef enum { 
+    /** Origin is a provider of destination */
+    C_edge = 0,
+    /** Origin is a peer of destination */
+    R_edge,
+    /** Origin is a customer of destination */
+    P_edge
+} edge_type;
+
+/** Route type code */
+typedef enum{
+    /** Origin uses customer route to destination */
+    C = 0,
+    /** Origin uses peer route to destination */
+    R,
+    /** Origin uses provider route to destination */
+    P,
+    /** Origin can not reach destination */
+    I
+} route_type;
 
 /** Node color code */
 typedef enum { white=0, grey, black } color;
-
-/** Edge type code */
-typedef enum { C=0,R,P,I } type;
 
 /**
  * @brief      Node of adjacency list
  */
 typedef struct AdjListNodeStruct
-{   
+{
     /** Desination of connection */
     int destination;
     /** Type of edge */
@@ -113,17 +138,22 @@ bool hasCycleDFS(Graph *graph, int source, color *v_color);
  *
  * @return     True if has any cycles, False otherwise.
  */
-bool hasCycle(Graph *graph); 
-
-
-
-
+bool hasCycle(Graph *graph);
 
 
 bool hasProvider(Graph *graph, int node);
 
-
 bool isStronglyConnected(Graph *graph);
+
+
+route_type selectionOp(edge_type in, route_type out);
+
+void dijkstra(Graph *graph, int node, PrioQueue *queue, route_type* routes, bool connected);
+
+void shortestPathTo(Graph *graph, int node, route_type* routes, bool connected);
+
+
+void printStatistics(Graph *graph, bool connected, bool verbose);
 
 /**
  * @brief      Prints the contents of the graph adjacency list representation
