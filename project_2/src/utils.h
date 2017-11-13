@@ -17,6 +17,20 @@
 
 #define errPrint(M, ...) fprintf(stderr, "ERROR: %s:%d:%s: " M "\n", __FILE__, __LINE__, __func__, ##__VA_ARGS__)
 
+#define SWAP_PTR(array, idx_a, idx_b)       \
+{                                           \
+    void* temp = (void*) array[idx_a];      \
+    array[idx_a] = (void*) array [idx_b];   \
+    array[idx_b] = temp;                    \
+}
+
+#define SWAP_INT(array, idx_a, idx_b)       \
+{                                           \
+    int temp = array[idx_a];                \
+    array[idx_a] = array[idx_b];            \
+    array[idx_b] = temp;                    \
+}
+
 /** Boolean types */
 typedef enum { false=0, true } bool;
 
@@ -34,5 +48,15 @@ typedef enum { false=0, true } bool;
  * @return     Index of first instance of number in array
  */
 int intFind(int *array, int size, int number);
+
+/**
+ * @brief      Returns the maximum of two integers
+ *
+ * @param[in]  a     Integer a
+ * @param[in]  b     Integer b
+ *
+ * @return     The max value
+ */
+int intMax(int a, int b);
 
 #endif

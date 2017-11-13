@@ -9,19 +9,7 @@
 // Error handling
 #include <assert.h>
 
-#define SWAP_PTR(array, idx_a, idx_b)       \
-{                                           \
-    void* temp = (void*) array[idx_a];      \
-    array[idx_a] = (void*) array [idx_b];   \
-    array[idx_b] = temp;                    \
-}
-
-#define SWAP_INT(array, idx_a, idx_b)       \
-{                                           \
-    int temp = array[idx_a];                \
-    array[idx_a] = array [idx_b];           \
-    array[idx_b] = temp;                    \
-}
+#include "utils.h"
 
 typedef struct QueueNodeStruct
 {   
