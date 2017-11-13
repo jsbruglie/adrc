@@ -15,18 +15,22 @@
 #include <assert.h>
 
 #include "utils.h"
+#include "queue.h"
 
-/** Node color code */
-typedef enum { white=0, grey, black } color;
+/** Number of connection types */
+#define CONNECTION_TYPES 4
 
 /** Edge type code */
 typedef enum { C=0,R,P,I } type;
+
+/** Node color code */
+typedef enum { white=0, grey, black } color;
 
 /**
  * @brief      Node of adjacency list
  */
 typedef struct AdjListNodeStruct
-{   
+{
     /** Desination of connection */
     int destination;
     /** Type of edge */
@@ -113,17 +117,22 @@ bool hasCycleDFS(Graph *graph, int source, color *v_color);
  *
  * @return     True if has any cycles, False otherwise.
  */
-bool hasCycle(Graph *graph); 
-
-
-
-
+bool hasCycle(Graph *graph);
 
 
 bool hasProvider(Graph *graph, int node);
 
-
 bool isStronglyConnected(Graph *graph);
+
+
+type selectionOp(type in, type out);
+
+void dijkstra(Graph *graph, int node, PrioQueue *queue, type* route_types);
+
+void shortestPathTo(Graph *graph, int node, type* route_types);
+
+
+void printStatistics(Graph *graph);
 
 /**
  * @brief      Prints the contents of the graph adjacency list representation

@@ -2,6 +2,9 @@
  * @file queue.h
  */
 
+#ifndef QUEUE_H
+#define QUEUE_H
+
 // Memory allocation
 #include <stdlib.h>
 // IO
@@ -17,6 +20,8 @@ typedef struct QueueNodeStruct
     int v;
     /** Current cost for a respective node */
     int cost;
+    /** In edge */
+    int in;
 
 } QueueNode;
 
@@ -48,3 +53,5 @@ void printPrioQueue(PrioQueue *queue);
 QueueNode *getMaxPriority(PrioQueue *queue);
 
 void decreaseKey(PrioQueue *queue, int node, int cost);
+
+#endif

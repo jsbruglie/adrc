@@ -4,6 +4,15 @@
 
 #include "graph.h"
 
+/** Resulting path type for ingoing and outgoing edge types */
+type TYPE_MATRIX[CONNECTION_TYPES][CONNECTION_TYPES] =
+{
+    { P, R, C, I},
+    { P, I, I, I},
+    { P, I, I, I},
+    { I, I, I, I},
+};
+
 AdjListNode *createNode(int destination, int type)
 {
     AdjListNode *node = (AdjListNode*) malloc(sizeof(AdjListNode));
@@ -240,8 +249,94 @@ bool isStronglyConnected(Graph *graph)
             }
         }
     }
-
     return true;
+}
+
+
+type selectionOp(type in, type out)
+{
+    return TYPE_MATRIX[in][out];
+}
+
+void dijkstra(Graph *graph, int node, PrioQueue *queue, type* route_types)
+{
+    int i;
+    QueueNode *min;
+    AdjListNode *neighbour;
+    type updated_cost;
+
+    // Initialise route type array to I (no path)
+    for (i = 0; i < graph->V; i++)
+        route_types[i] = I;
+    
+    decreaseKey(queue, node, (int) C);
+
+    // Main Dijkstra's algorithm loop
+    for (i = 0; i < graph->V - 1; i++)
+    {
+        min = getMaxPriority(queue);
+        //assert(min);
+        route_types[min->v] = min->cost;
+
+        // Early exit if extracted unreachable node
+        if (min->cost == I) break;
+        // TODO - Early exit if extracted P cost node and network is strongly connected
+
+        // Explore extracted node neighbourhood
+        neighbour = graph->lists[min->v];
+        while (neighbour)
+        {
+            updated_cost = selectionOp((type) min->cost, (type) neighbour->type);
+            decreaseKey(queue, neighbour->destination, updated_cost);
+            neighbour = neighbour->next;
+        }
+    }
+}
+
+void shortestPathTo(Graph *graph, int node, type* route_types)
+{
+    PrioQueue *queue;
+
+    if (graph && route_types)
+    {   
+        // Early exit if node is completely disconnected
+        if (!graph->lists[node]) return;
+
+        // Create priority queue
+        queue = createPrioQueue(CONNECTION_TYPES, graph->V);
+
+        dijkstra(graph, node, queue, route_types);   
+
+        // Free up resources
+        deletePrioQueue(&queue);
+    }
+}
+
+
+void printStatistics(Graph *graph)
+{
+    int i;
+    PrioQueue *queue;
+    type *routes;
+
+    int total_C = 0, total_R = 0, total_P = 0, total = 0;
+
+    if (graph)
+    {
+        queue = createPrioQueue(CONNECTION_TYPES, graph->V);
+        routes = (type*) malloc(sizeof(type) * graph->V);
+        assert(routes);
+
+        for (i = 0; i < graph->V; i++)
+        {
+            dijkstra(graph, i, queue, routes);
+            // TODO - process output and get statistics
+            initPrioQueue(queue);
+        }
+
+        deletePrioQueue(&queue);
+        free(routes);
+    }
 }
 
 void printGraph(Graph *graph)

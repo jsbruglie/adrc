@@ -28,11 +28,26 @@ int main(int argc, char *argv[])
 
     //printGraph(graph);
     
-    rv = hasCycle(graph);
-    printf("Graph has cycles %d\n", rv);
+    //rv = hasCycle(graph);
+    //printf("Graph has cycles %d\n", rv);
 
-    rv = isStronglyConnected(graph);
-    printf("Graph is strongly connected %d\n", rv);
+    //rv = isStronglyConnected(graph);
+    //printf("Graph is strongly connected %d\n", rv);
+
+    int node = 1234;
+
+    type routes[graph->V];
+    shortestPathTo(graph, node, routes);
+
+    int i;
+    for (i = 0; i < graph->V; i++){
+        if (graph->lists[i] && i != node)
+        { 
+            // TODO why is the route type output inverted?
+            printf("%d %d %d\n", i, 3-routes[i], node);
+        }
+    }
+    printf("\n");    
 
     deleteGraph(&graph);
 }
