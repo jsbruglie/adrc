@@ -13,7 +13,6 @@ typedef struct AdjListNode_t
 typedef struct Graph_t
 {
     int V;
-    int E;
     int **elected_route;
     AdjListNode **list;
 } Graph;
@@ -72,14 +71,12 @@ void shortest_path(Graph *graph, int src)
     int vertex;
     int *routes;
 
-    visited = (int *) calloc((graph->V), sizeof(int));
-    routes = (int *) calloc((graph->V), sizeof(int));
+    visited = (int *) malloc((graph->V)*sizeof(int));
+    routes = (int *) malloc((graph->V)*sizeof(int));
     for(int i = 1; i < graph->V; i++)
     {
-        if(graph->list[i] != NULL)
-        {
-            routes[i] = INT_MAX;
-        }
+        routes[i] = (graph->list[i] != NULL) ? INT_MAX : 0;
+        visited[i] = 0;
     }
 
     StackNode *customer = NULL;
@@ -193,7 +190,7 @@ void shortest_path(Graph *graph, int src)
     }
 
 
-    for(int i = 1;i < graph->V; i++)
+    for(int i = 1; i < graph->V; i++)
     {
         if(i != src)
         {
@@ -216,7 +213,7 @@ void shortest_path(Graph *graph, int src)
                     break;
             }
             */
-            if(routes[i] != 0)
+            if(routes[i] != 0 && routes[i] != INT_MAX)
                 fprintf(stdout, "%d %d %d\n", i, routes[i], src);
         }
     }
@@ -241,15 +238,12 @@ Graph *create_graph(int V)
     Graph *graph = (Graph *) malloc(sizeof(Graph));
 
     graph->V = V+1;
-    graph->E = 0;
 
     graph->list = (AdjListNode **) malloc((graph->V) * sizeof(AdjListNode*));
-    graph->elected_route = (int **) malloc((graph->V) * sizeof(int *));
 
     for(int i = 0; i < graph->V; i++)
     {
         graph->list[i] = NULL;
-        graph->elected_route[i] = (int *) calloc((graph->V), sizeof(int));
     }
 
     return graph;
@@ -260,7 +254,6 @@ void add_edge(Graph *graph, int src, int dest, int type)
     AdjListNode *node = create_node(dest, type);
     node->next = graph->list[src];
     graph->list[src] = node;
-    graph->E++;
 }
 
 
@@ -312,7 +305,30 @@ void print_graph(Graph *graph)
     }
 }
 
+void destroy_graph(Graph **graph_ptr)
+{
+    int i;
+    AdjListNode *cur, *next;
+    Graph *graph = *graph_ptr;
 
+    if (graph)
+    {
+        for (i = 0; i < graph->V; i++)
+        {
+            cur = graph->list[i];
+            while (cur)
+            {
+                next = cur->next;
+                free(cur);
+                cur = next;
+            }
+            graph->list[i] = NULL;
+        }
+        free(graph->list);
+        free(graph);
+    }
+    *graph_ptr = NULL;
+}
 
 
 
@@ -331,6 +347,7 @@ int main(int argc, char **argv)
     */
 
     shortest_path(graph, 1234);
+    destroy_graph(&graph);
 }
 
 
