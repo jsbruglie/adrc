@@ -49,14 +49,4 @@ typedef enum { false=0, true } bool;
  */
 int intFind(int *array, int size, int number);
 
-/**
- * @brief      Returns the maximum of two integers
- *
- * @param[in]  a     Integer a
- * @param[in]  b     Integer b
- *
- * @return     The max value
- */
-int intMax(int a, int b);
-
 #endif

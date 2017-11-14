@@ -19,7 +19,7 @@
 
 /** Number of connection types */
 #define EDGE_TYPES 3
-/** Number of connection types */
+/** Number of reoute types */
 #define ROUTE_TYPES 4
 
 /** Edge type code */
@@ -30,7 +30,7 @@ typedef enum {
     R_edge,
     /** Origin is a customer of destination */
     P_edge
-} edge_type;
+} EdgeType;
 
 /** Route type code */
 typedef enum{
@@ -42,7 +42,7 @@ typedef enum{
     P,
     /** Origin can not reach destination */
     I
-} route_type;
+} RouteType;
 
 /** Node color code */
 typedef enum { white=0, grey, black } color;
@@ -78,8 +78,8 @@ typedef struct GraphStruct
 /**
  * @brief      Creates an adjacency list node.
  *
- * @param[in]  destination  The destination node
- * @param[in]  type         The edge type
+ * @param      destination  The destination node
+ * @param      type         The edge type
  *
  * @return     The adjacency list node
  */
@@ -88,7 +88,7 @@ AdjListNode *createNode(int destination, int type);
 /**
  * @brief      Creates a graph.
  *
- * @param[in]  v     The number of nodes in the graph
+ * @param      v     The number of nodes in the graph
  *
  * @return     The graph
  */
@@ -98,9 +98,9 @@ Graph *createGraph(int v);
  * @brief      Adds an edge.
  *
  * @param      graph        The graph
- * @param[in]  source       The source node
- * @param[in]  destination  The destination node
- * @param[in]  type         The type of edge
+ * @param      source       The source node
+ * @param      destination  The destination node
+ * @param      type         The type of edge
  */
 void addEdge(Graph *graph, int source, int destination, int type);
 
@@ -124,7 +124,7 @@ void deleteGraph(Graph **graph);
  * @brief      Aux DFS to detect cycles.
  *
  * @param      graph    The graph
- * @param[in]  source   The source
+ * @param      source   The source
  * @param      v_color  The array of vertex colors
  *
  * @return     True if has cycle, False otherwise.
@@ -140,19 +140,72 @@ bool hasCycleDFS(Graph *graph, int source, color *v_color);
  */
 bool hasCycle(Graph *graph);
 
-
+/**
+ * @brief      Determines if a given node has a provider.
+ *
+ * @param      graph  The graph
+ * @param      node   The node
+ *
+ * @return     True if it has provider, False otherwise.
+ */
 bool hasProvider(Graph *graph, int node);
 
+/**
+ * @brief      Determines if a graph is strongly connected.
+ *
+ * In this particular domain, we say that the graph is commercially connected
+ * if a given node can reach any other in the graph. In this sense the concepts of
+ * strongly and commercially connected are interchangeable.
+ *
+ * @param      graph  The graph
+ *
+ * @return     True if graph is strongly connected, False otherwise.
+ */
 bool isStronglyConnected(Graph *graph);
 
+/**
+ * @brief      Returns the resulting route type
+ *
+ * @param      edge_type   The type of edge to destination
+ * @param      route_type  The type of the route so far
+ *
+ * @return     The resulting route type
+ */
+RouteType selectionOp(EdgeType edge_type, RouteType route_type);
 
-route_type selectionOp(edge_type in, route_type out);
+/**
+ * @brief      Dijkstra implementation
+ * 
+ * Calculates the type of elected route for all nodes in a graph to reach a given destination node
+ *
+ * @param      graph      The graph
+ * @param      node       The destination node
+ * @param      queue      The priority queue
+ * @param      routes     The elected routes output
+ * @param      connected  Whether the graph is commercially connected
+ */
+void dijkstra(Graph *graph, int node, PrioQueue *queue, RouteType* routes, bool connected);
 
-void dijkstra(Graph *graph, int node, PrioQueue *queue, route_type* routes, bool connected);
+/**
+ * @brief      Calculates the type of elected route for all nodes to reach a destination node 
+ *
+ * @param      graph      The graph
+ * @param      node       The destination node
+ * @param      routes     The elected routes output
+ * @param      connected  Whether the graph is commercially connected
+ */
+void shortestPathTo(Graph *graph, int node, RouteType* routes, bool connected);
 
-void shortestPathTo(Graph *graph, int node, route_type* routes, bool connected);
-
-
+/**
+ * @brief      Obtains and prints elected route statistics
+ * 
+ * Performs a Dijkstra's algorithm call per each node in the graph in order to obtain
+ * the elected routes from each node to every other in the network.
+ *
+ * @param      graph      The graph
+ * @param      connected  Whether the graph is commercially connected
+ * @param      verbose    Whether to show the progress in the terminal
+ */
 void printStatistics(Graph *graph, bool connected, bool verbose);
 
 /**
