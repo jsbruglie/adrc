@@ -45,6 +45,7 @@ int main(int argc, char *argv[])
     }
 
     graph = createGraphFromFile(argv[1]);
+    assert(graph);
 
     has_cycle = hasCycle(graph);
     is_connected = isStronglyConnected(graph);
