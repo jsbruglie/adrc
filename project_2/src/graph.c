@@ -17,9 +17,9 @@
  */
 RouteType ROUTE_TYPE_MATRIX[EDGE_TYPES][ROUTE_TYPES] =
 {
-    { P, P, P, I}, // Since t 
-    { R, I, I, I}, //
-    { C, I, I, I}  //
+    { P, P, P, I}, // Notice that the first and last row were swapped.
+    { R, I, I, I}, // This is a simple trick to avoid additional verifications
+    { C, I, I, I}  // or manually swapping the edge types in the graph itself.
 };
 
 AdjListNode *createNode(int destination, int type)
