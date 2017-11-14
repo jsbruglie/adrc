@@ -28,7 +28,7 @@ void printUsage(char *argv[])
 /**
  * @brief      The main program
  *
- * @param[in]  argc  The argc
+ * @param      argc  The argc
  * @param      argv  The argv
  *
  * @return     0

@@ -1,5 +1,9 @@
 /**
  * @file graph.c
+ * @brief Graph implementation
+ * 
+ * @author Nuno Venturinha
+ * @author João Borrego
  */
 
 #include "graph.h"

@@ -1,5 +1,14 @@
 /**
  * @file graph.h
+ * @brief Graph headers
+ * 
+ * Graph representation for networks using adjacency lists and set of tools such as:
+ * - Customer cycle detection
+ * - Check if network is commercially connected
+ * - Determination of elected routes between nodes
+ * 
+ * @author Nuno Venturinha
+ * @author João Borrego
  */
 
 #ifndef GRAPH_H

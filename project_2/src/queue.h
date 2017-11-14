@@ -52,8 +52,8 @@ typedef struct PrioQueueStruct
 /**
  * @brief      Creates a priority queue.
  *
- * @param[in]  values  The number of possible cost values
- * @param[in]  size    The size of the queue
+ * @param      values  The number of possible cost values
+ * @param      size    The size of the queue
  *
  * @return     The priority queue
  */
@@ -96,8 +96,8 @@ QueueNode *getMaxPriority(PrioQueue *queue);
  * and the function simply returns.
  *
  * @param      queue  The queue
- * @param[in]  node   The node
- * @param[in]  cost   The new cost
+ * @param      node   The node
+ * @param      cost   The new cost
  */
 void decreaseKey(PrioQueue *queue, int node, int cost);
 
