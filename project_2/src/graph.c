@@ -152,8 +152,7 @@ bool hasCycle(Graph *graph)
 
     if (graph)
     {
-        // TODO Proper malloc; V not known at compile time
-        color v_color[graph->V];
+        color *v_color = (color*) malloc(sizeof(color) * graph->V);
         
         for (i = 0; i < graph->V; i++)
         {
@@ -169,6 +168,8 @@ bool hasCycle(Graph *graph)
                     break;
             }
         }
+
+        free(v_color);
     }
     return found_cycle;
 }
