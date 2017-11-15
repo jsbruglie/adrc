@@ -1,5 +1,14 @@
 /**
  * @file queue.h
+ * @brief Priority queue headers
+ * 
+ * Implements a priority queue that has:
+ * - O(1) removal of highest priority node
+ * - O(d) decrease key, d number of possible values for priority or cost.
+ *  This constrains the cost to a discrete set of values from 0 to values - 1.
+ * 
+ * @author Nuno Venturinha
+ * @author João Borrego
  */
 
 #ifndef QUEUE_H
@@ -27,7 +36,7 @@ typedef struct PrioQueueStruct
 {   
     /** Number of possible values for cost */
     int         values;
-    /** Dimension of set of possible values for cost */
+    /** Size of the queue */
     int         size;
     /** Node array */
     QueueNode   **array;
@@ -40,16 +49,56 @@ typedef struct PrioQueueStruct
 
 } PrioQueue;
 
+/**
+ * @brief      Creates a priority queue.
+ *
+ * @param      values  The number of possible cost values
+ * @param      size    The size of the queue
+ *
+ * @return     The priority queue
+ */
 PrioQueue *createPrioQueue(int values, int size);
 
+/**
+ * @brief      Deletes a priority queue
+ *
+ * @param      queue_ptr  The queue pointer
+ */
 void deletePrioQueue(PrioQueue **queue_ptr);
 
+/**
+ * @brief      Initializes an existing priority queue
+ *
+ * @param      queue  The queue
+ */
 void initPrioQueue(PrioQueue *queue);
 
+/**
+ * @brief      Prints the contents of the priority queue
+ *
+ * @param      queue  The queue
+ */
 void printPrioQueue(PrioQueue *queue);
 
+/**
+ * @brief      Extracts the node with maximum priority.
+ *
+ * @param      queue  The queue
+ *
+ * @return     The node with maximum priority.
+ */
 QueueNode *getMaxPriority(PrioQueue *queue);
 
+/**
+ * @brief      Lowers the cost for a given node in the queue
+ *
+ * If a the provided cost is higher than the current, it is disregarded
+ * and the function simply returns.
+ *
+ * @param      queue  The queue
+ * @param      node   The node
+ * @param      cost   The new cost
+ */
 void decreaseKey(PrioQueue *queue, int node, int cost);
 
 #endif
