@@ -346,7 +346,6 @@ void printStatistics(Graph *graph, bool connected, bool verbose)
 
         for (i = 0; i < graph->V; i++)
         {
-            int tid = omp_get_thread_num();
             // Only check nodes that are not completely disconnected
             if (graph->lists[i])
             {
