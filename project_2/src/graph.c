@@ -344,7 +344,6 @@ void printStatistics(Graph *graph, bool connected, bool verbose)
         RouteType *routes = (RouteType*) malloc(sizeof(RouteType) * graph->V);
         assert(routes);
 
-        #pragma omp for schedule(dynamic)
         for (i = 0; i < graph->V; i++)
         {
             int tid = omp_get_thread_num();
