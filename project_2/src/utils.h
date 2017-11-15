@@ -1,5 +1,9 @@
 /**
  * @file utils.h
+ * @brief Utilities headers
+ * 
+ * @author Nuno Venturinha
+ * @author João Borrego
  */
 
 #ifndef UTILS_H
@@ -42,21 +46,11 @@ typedef enum { false=0, true } bool;
  * @brief      Finds the index of the first instance of a number in an array
  *
  * @param      array  The array
- * @param[in]  size   The size of the array
- * @param[in]  number The number
+ * @param      size   The size of the array
+ * @param      number The number
  *
  * @return     Index of first instance of number in array
  */
 int intFind(int *array, int size, int number);
-
-/**
- * @brief      Returns the maximum of two integers
- *
- * @param[in]  a     Integer a
- * @param[in]  b     Integer b
- *
- * @return     The max value
- */
-int intMax(int a, int b);
 
 #endif

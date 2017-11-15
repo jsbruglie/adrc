@@ -1,15 +1,25 @@
 /**
  * @file graph.c
+ * @brief Graph implementation
+ * 
+ * @author Nuno Venturinha
+ * @author João Borrego
  */
 
 #include "graph.h"
 
-/** Resulting path type for ingoing and outgoing edge types */
-route_type TYPE_MATRIX[EDGE_TYPES][ROUTE_TYPES] =
+/**
+ * @brief Matrix for calculating a resulting route type
+ * 
+ * Outputs the resulting route type for a given
+ * - type of edge that leads to the destination node
+ * - type of current route so far
+ */
+RouteType ROUTE_TYPE_MATRIX[EDGE_TYPES][ROUTE_TYPES] =
 {
-    { P, P, P, I},
-    { R, I, I, I},
-    { C, I, I, I}
+    { P, P, P, I}, // Notice that the first and last row were swapped.
+    { R, I, I, I}, // This is a simple trick to avoid additional verifications
+    { C, I, I, I}  // or manually swapping the edge types in the graph itself.
 };
 
 AdjListNode *createNode(int destination, int type)
@@ -142,8 +152,7 @@ bool hasCycle(Graph *graph)
 
     if (graph)
     {
-        // TODO Proper malloc; V not known at compile time
-        color v_color[graph->V];
+        color *v_color = (color*) malloc(sizeof(color) * graph->V);
         
         for (i = 0; i < graph->V; i++)
         {
@@ -159,6 +168,7 @@ bool hasCycle(Graph *graph)
                     break;
             }
         }
+        free(v_color);
     }
     return found_cycle;
 }
@@ -228,7 +238,7 @@ bool isStronglyConnected(Graph *graph)
             if (cur->type == R_edge)
             {
                 idx = intFind(top_tier_candidates, n_top, cur->destination);
-                peer_connected[idx] = true;
+                if (idx >= 0) peer_connected[idx] = true;
             }
             cur = cur->next;
         }
@@ -251,47 +261,48 @@ bool isStronglyConnected(Graph *graph)
     return true;
 }
 
-
-route_type selectionOp(edge_type in, route_type out)
+RouteType selectionOp(EdgeType edge_type, RouteType route_type)
 {
-    return TYPE_MATRIX[in][out];
+    return ROUTE_TYPE_MATRIX[edge_type][route_type];
 }
 
-void dijkstra(Graph *graph, int node, PrioQueue *queue, route_type* routes, bool connected)
+void dijkstra(Graph *graph, int node, PrioQueue *queue, RouteType* routes, bool connected)
 {
     int i;
     QueueNode *min;
     AdjListNode *neighbour;
-    route_type initial_cost = (connected)? P : I; 
-    route_type updated_cost;
+    // If a route is comercially connected every node is reachable
+    RouteType initial_cost = (connected)? P : I; 
+    RouteType updated_cost;
 
-    // Initialise route type array to I (no path)
+    // Initialise the route type array
     for (i = 0; i < graph->V; i++)
         routes[i] = initial_cost;
     
+    // Decrease the cost of the destination node in queue
     decreaseKey(queue, node, (int) C);
 
     // Main Dijkstra's algorithm loop
     for (i = 0; i < graph->V; i++)
     {
         min = getMaxPriority(queue);
-        //assert(min);
+        assert(min);
         routes[min->v] = min->cost;
 
         // Early exit if extracted unreachable node
         if (min->cost == I) break;
-        // TODO - Early exit if extracted P cost node and network is strongly connected
+        // Early exit if network is strongly connected and a node with a provider route is extracted
+        // This is a very important optimization and greatly improves run time!
         if (connected && min->cost == P) break;
 
-        // Explore extracted node neighbourhood
+        // Explore extracted node's neighbours
         neighbour = graph->lists[min->v];
         while (neighbour)
         {   
             // If neighbour has not been extracted from priority queue
             if (routes[neighbour->destination] == initial_cost)
             {
-                // TODO - maybe remove selectionOp function and replace with direct matrix access?
-                updated_cost = selectionOp((edge_type) neighbour->type, (route_type) min->cost);
+                updated_cost = selectionOp((EdgeType) neighbour->type, (RouteType) min->cost);
                 decreaseKey(queue, neighbour->destination, updated_cost);
             }
             neighbour = neighbour->next;
@@ -299,7 +310,7 @@ void dijkstra(Graph *graph, int node, PrioQueue *queue, route_type* routes, bool
     }
 }
 
-void shortestPathTo(Graph *graph, int node, route_type* routes, bool connected)
+void shortestPathTo(Graph *graph, int node, RouteType* routes, bool connected)
 {
     PrioQueue *queue; 
     if (graph && routes)
@@ -320,45 +331,57 @@ void shortestPathTo(Graph *graph, int node, route_type* routes, bool connected)
 
 void printStatistics(Graph *graph, bool connected, bool verbose)
 {
-    int i, j;
-    PrioQueue *queue;
-    route_type *routes;
 
-    int num_route_types[ROUTE_TYPES] = {0};
+    int num_C_routes = 0;
+    int num_R_routes = 0;
+    int num_P_routes = 0;
     int total = 0;
 
     if (graph)
     {
-        queue = createPrioQueue(EDGE_TYPES, graph->V);
-        routes = (route_type*) malloc(sizeof(route_type) * graph->V);
-        assert(routes);
-
-        for (i = 0; i < graph->V; i++)
+        #pragma omp parallel reduction(+:num_C_routes, num_R_routes, num_P_routes, total)
         {
-            // Only check nodes that are not completely disconnected
-            if (graph->lists[i])
+            int i, j;
+            PrioQueue *queue = createPrioQueue(EDGE_TYPES, graph->V);
+            RouteType *routes = (RouteType*) malloc(sizeof(RouteType) * graph->V);
+            assert(routes);
+
+            #pragma omp for schedule(dynamic)
+            for (i = 0; i < graph->V; i++)
             {
-                dijkstra(graph, i, queue, routes, connected);    
-                
-                for (j = 0; j < graph->V; j++)
+                int tid = omp_get_thread_num();
+                // Only check nodes that are not completely disconnected
+                if (graph->lists[i])
                 {
-                    if (j != i && graph->lists[j])
+                    dijkstra(graph, i, queue, routes, connected);    
+                    
+                    for (j = 0; j < graph->V; j++)
                     {
-                        num_route_types[routes[j]]++;
-                        total++;
+                        if (j != i && graph->lists[j])
+                        {
+                            switch(routes[j])
+                            {
+                                case C: num_C_routes++; break;
+                                case R: num_R_routes++; break;
+                                case P: num_P_routes++; break;
+                            }
+                            total++;
+                        }
                     }
+                    initPrioQueue(queue);
                 }
 
+                if (verbose) printf("\rWorking: %.2f%%", (i * 100.0) / (1.0 * graph->V));
+
+                // Re-initialize priority queue for reuse in next iteration
                 initPrioQueue(queue);
             }
-            if (verbose) printf("\rWorking: %.2f%%", (i * 100.0) / (1.0 * graph->V));
+            deletePrioQueue(&queue);
+            free(routes);
         }
 
-        printf("\nRoutes\n\tCustomer:\t%d\n\tPeer:\t\t%d\n\tProvider:\t%d\n\tTotal:\t\t%d\n",
-            num_route_types[C], num_route_types[R], num_route_types[P], total);
-
-        deletePrioQueue(&queue);
-        free(routes);
+        printf("Routes\n\tCustomer:\t%d\n\tPeer:\t\t%d\n\tProvider:\t%d\n\tTotal:\t\t%d\n",
+            num_C_routes, num_R_routes, num_P_routes, total);
     }
 }
 
