@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
     printf("Graph has %scustomer cycles.\n", (has_cycle)? "" : "no ");
     printf("Graph is %sstrongly connected.\n", (is_connected)? "" : "not ");
 
-    printStatistics(graph, is_connected, false);
+    printStatistics(graph, is_connected, true);
 
     //printElectedRoutesToNode(graph, 1234, is_connected);
 
