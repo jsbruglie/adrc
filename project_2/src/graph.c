@@ -169,7 +169,7 @@ bool hasCycle(Graph *graph)
             }
         }
 
-        free(v_color);
+        free(v_color);}
     }
     return found_cycle;
 }
@@ -239,7 +239,7 @@ bool isStronglyConnected(Graph *graph)
             if (cur->type == R_edge)
             {
                 idx = intFind(top_tier_candidates, n_top, cur->destination);
-                peer_connected[idx] = true;
+                if (idx >= 0) peer_connected[idx] = true;
             }
             cur = cur->next;
         }
