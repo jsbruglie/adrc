@@ -22,6 +22,8 @@
 #include <string.h>
 // Error handling
 #include <assert.h>
+// Multithread
+#include <omp.h>
 
 #include "utils.h"
 #include "queue.h"
