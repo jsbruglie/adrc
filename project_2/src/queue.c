@@ -1,9 +1,5 @@
 /**
  * @file queue.c
- * @brief Priority queue implementation
- * 
- * @author Nuno Venturinha
- * @author João Borrego
  */
 
 #include "queue.h"
@@ -146,6 +142,11 @@ void decreaseKey(PrioQueue *queue, int node, int cost)
         old_cost = queue->array[idx_node]->cost;
         if (cost < old_cost)
         {
+            /*   
+            printf("Change:\tNode %d to cost %d\n", node, cost);
+            printf("\tNode found at index %d\n", idx_node);
+            */
+
             // Update node cost
             queue->array[idx_node]->cost = cost;
             
@@ -162,6 +163,12 @@ void decreaseKey(PrioQueue *queue, int node, int cost)
                     queue->idx_array[queue->array[idx_node]->v] = block_start;
                     queue->idx_array[queue->array[block_start]->v] = idx_node;
                     SWAP_PTR(queue->array, idx_node, block_start);
+                    /*
+                    printf("\tSwapping (%d,%d) <---> (%d,%d)\n",
+                        queue->array[idx_node]->v, queue->array[idx_node]->cost, 
+                        queue->array[block_start]->v, queue->array[block_start]->cost);
+                    printPrioQueue(queue);
+                    */
                 }
                 // Fix block start indices
                 queue->idx_block[i]++;
