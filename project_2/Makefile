@@ -6,7 +6,7 @@ BUILD_DIR ?= ./build
 BIN_DIR ?= ./bin
 SRC_DIRS ?= ./src
 
-SRCS := $(shell find $(SRC_DIRS) -name *.cpp -or -name *.c -or -name *.s)
+SRCS := $(shell find $(SRC_DIRS) -name *.c)
 OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)
 DEPS := $(OBJS:.o=.d)
 
@@ -20,17 +20,12 @@ MKDIR_P ?= mkdir -p
 # Main binary executable
 $(BIN_DIR)/$(TARGET_EXEC): $(OBJS)
 	@$(MKDIR_P) $(dir $@)
-	$(CC) $(OBJS) -o $@ $(LDFLAGS)
+	$(CC) -fopenmp $(OBJS) -o $@ $(LDFLAGS)
 
 # C source
 $(BUILD_DIR)/%.c.o: %.c
 	@$(MKDIR_P) $(dir $@)
-	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
-
-# C++ source
-$(BUILD_DIR)/%.cpp.o: %.cpp
-	@$(MKDIR_P) $(dir $@)
-	g++ $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
+	$(CC) -fopenmp $(CPPFLAGS) $(CFLAGS) -c $< -o $@
 
 .PHONY: clean
 
