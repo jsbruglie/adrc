@@ -182,7 +182,7 @@ bool isStronglyConnected(Graph *graph);
  *
  * @return     The resulting route type
  */
-RouteType selectionOp(EdgeType edge_type, RouteType route_type);
+RouteType extensionOp(EdgeType edge_type, RouteType route_type);
 
 /**
  * @brief      Dijkstra implementation
