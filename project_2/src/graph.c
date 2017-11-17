@@ -85,7 +85,8 @@ Graph *createGraphFromFile(char *text_file)
     }
     else
     {
-        // TODO - handle incorrect file
+        printf("Invalid file provided. Exiting.\n");
+        exit(EXIT_FAILURE);
     }
 
     fclose(infile);
