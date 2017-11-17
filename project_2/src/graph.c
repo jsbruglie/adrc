@@ -376,7 +376,7 @@ void printStatistics(Graph *graph, bool connected, bool verbose)
         deletePrioQueue(&queue);
         free(routes);
 
-        printf("Routes\n\tCustomer:\t%d\n\tPeer:\t\t%d\n\tProvider:\t%d\n\tTotal:\t\t%d\n",
+        printf("\nRoutes\n\tCustomer:\t%d\n\tPeer:\t\t%d\n\tProvider:\t%d\n\tTotal:\t\t%d\n",
             num_C_routes, num_R_routes, num_P_routes, total);
     }
 }
