@@ -261,7 +261,7 @@ bool isStronglyConnected(Graph *graph)
     return true;
 }
 
-RouteType selectionOp(EdgeType edge_type, RouteType route_type)
+RouteType extensionOp(EdgeType edge_type, RouteType route_type)
 {
     return ROUTE_TYPE_MATRIX[edge_type][route_type];
 }
@@ -302,7 +302,7 @@ void dijkstra(Graph *graph, int node, PrioQueue *queue, RouteType* routes, bool 
             // If neighbour has not been extracted from priority queue
             if (routes[neighbour->destination] == initial_cost)
             {
-                updated_cost = selectionOp((EdgeType) neighbour->type, (RouteType) min->cost);
+                updated_cost = extensionOp((EdgeType) neighbour->type, (RouteType) min->cost);
                 decreaseKey(queue, neighbour->destination, updated_cost);
             }
             neighbour = neighbour->next;
